@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { calcularFatura } from "@/lib/calculos-fiscais";
@@ -24,6 +24,7 @@ interface FaturasClientProps {
   faturas: Fatura[];
   config: ConfiguracoesFiscais | null;
   userId: string;
+  autoOpenModal?: boolean;
 }
 
 interface NovaFaturaForm {
@@ -42,7 +43,7 @@ const FORM_INICIAL: NovaFaturaForm = {
   tem_retencao: false,
 };
 
-export function FaturasClient({ faturas: inicial, config, userId }: FaturasClientProps) {
+export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal }: FaturasClientProps) {
   const router = useRouter();
   const supabase = createClient();
   const [isPending, startTransition] = useTransition();
@@ -50,6 +51,10 @@ export function FaturasClient({ faturas: inicial, config, userId }: FaturasClien
   const [faturas, setFaturas] = useState<Fatura[]>(inicial);
   const [modalAberto, setModalAberto] = useState(false);
   const [modalImportar, setModalImportar] = useState(false);
+
+  useEffect(() => {
+    if (autoOpenModal) setModalAberto(true);
+  }, [autoOpenModal]);
   // Inicializa tem_retencao com o default das configurações do utilizador
   const [form, setForm] = useState<NovaFaturaForm>({
     ...FORM_INICIAL,
@@ -410,6 +415,7 @@ export function FaturasClient({ faturas: inicial, config, userId }: FaturasClien
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     "Adicionar fatura"
+
                   )}
                 </Button>
               </div>
