@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     const totaisSection = primeiraPagina.slice(primeiraPagina.indexOf("TOTAIS DO DOCUMENTO"));
 
     // Todos os valores monetários na secção, em ordem
-    const amounts = [...totaisSection.matchAll(/([\d.]+,\d{2})\s*€/g)].map((m) =>
+    const amounts = Array.from(totaisSection.matchAll(/([\d.]+,\d{2})\s*€/g)).map((m) =>
       parseNum(m[1])
     );
 
