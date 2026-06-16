@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Calculadora } from "@/components/Calculadora";
 import { CofreFiscal } from "@/components/CofreFiscal";
 import { Button } from "@/components/ui/button";
@@ -117,9 +118,11 @@ export default function Home() {
             <a href="#faq" className="hover:text-[#1F4E79] transition-colors font-medium">FAQ</a>
           </div>
 
-          <Button className="bg-[#BF4700] hover:bg-[#BF4700]/90 text-sm h-9 px-5 rounded-lg font-semibold shadow-sm transition-colors">
-            Comecar gratis
-            <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+          <Button asChild className="bg-[#BF4700] hover:bg-[#BF4700]/90 text-sm h-9 px-5 rounded-lg font-semibold shadow-sm transition-colors">
+            <Link href="/register">
+              Comecar gratis
+              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+            </Link>
           </Button>
         </div>
       </nav>
@@ -170,18 +173,22 @@ export default function Home() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 pt-1">
               <Button
+                asChild
                 size="lg"
                 className="bg-[#BF4700] hover:bg-[#BF4700]/90 text-base h-13 px-7 font-bold rounded-xl shadow-lg transition-colors"
               >
-                Calcular o que devo agora
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <Link href="/register">
+                  Calcular o que devo agora
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
               </Button>
               <Button
+                asChild
                 size="lg"
                 variant="outline"
                 className="border-gray-300 text-gray-700 hover:bg-gray-50 h-13 px-6 rounded-xl"
               >
-                Ver demo gratis
+                <a href="#calculadora">Ver demo gratis</a>
               </Button>
             </div>
 
@@ -337,11 +344,14 @@ export default function Home() {
             {/* CTA inside dark section */}
             <div className="mt-8 text-center">
               <Button
+                asChild
                 size="lg"
                 className="bg-[#BF4700] hover:bg-[#BF4700]/90 text-base h-12 px-9 font-bold rounded-xl shadow-lg"
               >
-                Quero controlar isto agora
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <Link href="/register">
+                  Quero controlar isto agora
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
               </Button>
               <p className="text-gray-500 text-xs mt-3">14 dias gratis &middot; Sem cartao</p>
             </div>
@@ -718,11 +728,14 @@ export default function Home() {
               </div>
 
               <Button
+                asChild
                 size="lg"
                 className="bg-white text-[#1F4E79] hover:bg-blue-50 font-bold h-12 px-7 rounded-xl shadow-md"
               >
-                Comecar trial gratis — 14 dias
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <Link href="/register">
+                  Comecar trial gratis — 14 dias
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
               </Button>
               <p className="text-blue-300 text-xs">Sem cartao de credito</p>
             </div>
@@ -757,11 +770,14 @@ export default function Home() {
             ))}
           </div>
           <Button
+            asChild
             size="lg"
             className="bg-white text-[#1E7145] hover:bg-green-50 font-bold h-12 px-9 rounded-xl shadow-lg"
           >
-            Comecar agora — 14 dias gratis
-            <ArrowRight className="ml-2 w-4 h-4" />
+            <Link href="/register">
+              Comecar agora — 14 dias gratis
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Link>
           </Button>
         </div>
       </section>
@@ -959,10 +975,11 @@ export default function Home() {
               </CardContent>
               <CardFooter className="pt-4">
                 <Button
+                  asChild
                   variant="outline"
                   className="w-full border-[#1F4E79] text-[#1F4E79] hover:bg-[#1F4E79]/5 rounded-xl h-11 font-semibold"
                 >
-                  Comecar trial gratis
+                  <Link href="/register">Comecar trial gratis</Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -999,9 +1016,11 @@ export default function Home() {
                 ))}
               </CardContent>
               <CardFooter className="pt-4 flex-col gap-3">
-                <Button className="w-full bg-[#1F4E79] hover:bg-[#2E75B6] rounded-xl h-11 font-bold shadow-sm transition-colors">
-                  Comecar trial gratis
-                  <ArrowRight className="ml-1.5 w-4 h-4" />
+                <Button asChild className="w-full bg-[#1F4E79] hover:bg-[#2E75B6] rounded-xl h-11 font-bold shadow-sm transition-colors">
+                  <Link href="/register">
+                    Comecar trial gratis
+                    <ArrowRight className="ml-1.5 w-4 h-4" />
+                  </Link>
                 </Button>
                 <div className="flex items-center justify-center gap-1.5 text-xs text-gray-500">
                   <Shield className="w-3.5 h-3.5 text-[#1E7145]" />
@@ -1100,11 +1119,14 @@ export default function Home() {
           </div>
 
           <Button
+            asChild
             size="lg"
             className="bg-[#BF4700] hover:bg-[#BF4700]/90 text-white text-base h-14 px-10 font-extrabold rounded-xl shadow-xl transition-colors"
           >
-            Calcular o meu liquido real agora
-            <ArrowRight className="ml-2 w-5 h-5" />
+            <Link href="/register">
+              Calcular o meu liquido real agora
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
           </Button>
           <p className="text-gray-500 text-sm">
             Sem cartao de credito &nbsp;&middot;&nbsp; 14 dias gratis
@@ -1131,6 +1153,7 @@ export default function Home() {
             </div>
 
             <div className="flex gap-6 text-sm text-gray-500">
+
               <a href="#" className="hover:text-white transition-colors">Privacidade</a>
               <a href="#" className="hover:text-white transition-colors">Termos</a>
               <a href="mailto:hello@freelancerpt.app" className="hover:text-white transition-colors">Contacto</a>
