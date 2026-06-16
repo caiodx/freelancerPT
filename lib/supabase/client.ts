@@ -1,7 +1,6 @@
 import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "./types";
 
-// Cliente para componentes client-side ("use client")
 export function createClient() {
   return createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

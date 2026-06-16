@@ -83,8 +83,8 @@ export default async function PrazosPage() {
     .eq("user_id", user.id)
     .single();
 
-  const isentoIVA     = config?.isento_iva ?? false;
-  const primeiroAno   = config?.primeiro_ano ?? false;
+  const isentoIVA   = config?.isento_iva ?? false;
+  const primeiroAno = config?.primeiro_ano ?? false;
 
   // Montar lista de prazos
   const prazosBase = getPrazosFiscais2026();
@@ -98,17 +98,14 @@ export default async function PrazosPage() {
     (a, b) => a.data.getTime() - b.data.getTime()
   );
 
-  const hoje = new Date();
   const futuros  = todos.filter((p) => diasAte(p.data) >= 0);
   const passados = todos.filter((p) => diasAte(p.data) < 0).reverse();
 
-  // Próximo prazo
   const proximo = futuros[0];
 
   return (
     <div className="p-6 lg:p-8 max-w-4xl mx-auto space-y-8">
 
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Prazos Fiscais</h1>
         <p className="text-sm text-gray-500 mt-0.5">
@@ -116,7 +113,6 @@ export default async function PrazosPage() {
         </p>
       </div>
 
-      {/* Banner próximo prazo */}
       {proximo && (() => {
         const dias = diasAte(proximo.data);
         const meta = TIPO_META[proximo.tipo];
@@ -135,10 +131,7 @@ export default async function PrazosPage() {
                   Próximo prazo
                 </p>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span
-                    className="text-xs font-bold uppercase px-2 py-0.5 rounded text-white"
-                    style={{ background: meta.cor }}
-                  >
+                  <span className="text-xs font-bold uppercase px-2 py-0.5 rounded text-white" style={{ background: meta.cor }}>
                     {meta.label}
                   </span>
                   <h2 className={`text-lg font-extrabold ${urgente ? "text-red-800" : "text-blue-900"}`}>
@@ -146,21 +139,15 @@ export default async function PrazosPage() {
                   </h2>
                 </div>
                 <p className={`text-sm mt-0.5 capitalize ${urgente ? "text-red-600" : "text-blue-700"}`}>
-                  {formatarData(proximo.data)} —{" "}
-                  <strong>
-                    {dias === 0 ? "hoje!" : dias === 1 ? "amanhã!" : `${dias} dias`}
-                  </strong>
+                  {formatarData(proximo.data)} — <strong>{dias === 0 ? "hoje!" : dias === 1 ? "amanhã!" : `${dias} dias`}</strong>
                 </p>
-                <p className={`text-xs mt-2 ${urgente ? "text-red-500" : "text-blue-500"}`}>
-                  {meta.dica}
-                </p>
+                <p className={`text-xs mt-2 ${urgente ? "text-red-500" : "text-blue-500"}`}>{meta.dica}</p>
               </div>
             </div>
           </div>
         );
       })()}
 
-      {/* Avisos de isenção */}
       {(isentoIVA || primeiroAno) && (
         <div className="flex flex-col gap-2">
           {isentoIVA && (
@@ -182,7 +169,6 @@ export default async function PrazosPage() {
         </div>
       )}
 
-      {/* Lista de prazos futuros */}
       <div>
         <h2 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
           <Calendar className="w-4 h-4 text-gray-400" />
@@ -197,47 +183,22 @@ export default async function PrazosPage() {
             const meta   = TIPO_META[prazo.tipo];
             const badge  = badgeUrgencia(dias);
             const largura = Math.max(3, Math.min(100, Math.round((1 - dias / 120) * 100)));
-
             return (
-              <div
-                key={`${prazo.label}-${prazo.data.toISOString()}`}
-                className="bg-white rounded-xl border border-gray-100 overflow-hidden"
-              >
-                {/* Barra de urgência no topo */}
+              <div key={`${prazo.label}-${prazo.data.toISOString()}`} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
                 <div className="h-1 bg-gray-100">
-                  <div
-                    className="h-full transition-all"
-                    style={{
-                      width: `${largura}%`,
-                      background: dias <= 7 ? "#ef4444" : dias <= 30 ? "#f59e0b" : meta.cor,
-                    }}
-                  />
+                  <div className="h-full transition-all" style={{ width: `${largura}%`, background: dias <= 7 ? "#ef4444" : dias <= 30 ? "#f59e0b" : meta.cor }} />
                 </div>
-
                 <div className="px-5 py-4 flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
-                    {/* Tipo badge */}
-                    <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                      style={{ background: `${meta.cor}18` }}
-                    >
-                      <span
-                        className="text-[10px] font-extrabold uppercase"
-                        style={{ color: meta.cor }}
-                      >
-                        {meta.label}
-                      </span>
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ background: `${meta.cor}18` }}>
+                      <span className="text-[10px] font-extrabold uppercase" style={{ color: meta.cor }}>{meta.label}</span>
                     </div>
-
                     <div>
                       <p className="font-bold text-gray-900 text-sm">{prazo.label}</p>
-                      <p className="text-xs text-gray-400 capitalize mt-0.5">
-                        {formatarData(prazo.data)}
-                      </p>
+                      <p className="text-xs text-gray-400 capitalize mt-0.5">{formatarData(prazo.data)}</p>
                       <p className="text-xs text-gray-400 mt-1">{prazo.descricao}</p>
                     </div>
                   </div>
-
                   <div className="shrink-0 text-right">
                     <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full ${badge.bg} ${badge.text}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
@@ -254,7 +215,6 @@ export default async function PrazosPage() {
         </div>
       </div>
 
-      {/* Prazos passados */}
       {passados.length > 0 && (
         <div>
           <h2 className="font-bold text-gray-400 mb-3 flex items-center gap-2 text-sm">
@@ -265,21 +225,11 @@ export default async function PrazosPage() {
             {passados.map((prazo) => {
               const meta = TIPO_META[prazo.tipo];
               return (
-                <div
-                  key={`${prazo.label}-${prazo.data.toISOString()}`}
-                  className="bg-gray-50 rounded-xl border border-gray-100 px-5 py-3.5 flex items-center justify-between gap-4 opacity-60"
-                >
+                <div key={`${prazo.label}-${prazo.data.toISOString()}`} className="bg-gray-50 rounded-xl border border-gray-100 px-5 py-3.5 flex items-center justify-between gap-4 opacity-60">
                   <div className="flex items-center gap-3">
-                    <span
-                      className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded text-white"
-                      style={{ background: meta.cor }}
-                    >
-                      {meta.label}
-                    </span>
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded text-white" style={{ background: meta.cor }}>{meta.label}</span>
                     <p className="text-sm font-medium text-gray-600">{prazo.label}</p>
-                    <p className="text-xs text-gray-400 capitalize hidden sm:block">
-                      {formatarData(prazo.data)}
-                    </p>
+                    <p className="text-xs text-gray-400 capitalize hidden sm:block">{formatarData(prazo.data)}</p>
                   </div>
                   <CheckCircle2 className="w-4 h-4 text-gray-300 shrink-0" />
                 </div>
@@ -289,7 +239,6 @@ export default async function PrazosPage() {
         </div>
       )}
 
-      {/* Nota informativa */}
       <div className="flex items-start gap-3 bg-gray-50 rounded-xl border border-gray-100 px-5 py-4">
         <Info className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
         <p className="text-xs text-gray-500 leading-relaxed">

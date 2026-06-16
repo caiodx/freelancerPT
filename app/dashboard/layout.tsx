@@ -14,7 +14,6 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  // Redirecionar para onboarding se não tiver completado a configuração inicial
   const { data: config } = await supabase
     .from("configuracoes_fiscais")
     .select("onboarding_completed")

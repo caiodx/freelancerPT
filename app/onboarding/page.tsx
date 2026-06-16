@@ -8,7 +8,6 @@ export default async function OnboardingPage() {
 
   if (!user) redirect("/login");
 
-  // Se já completou o onboarding, vai directamente ao dashboard
   const { data: config } = await supabase
     .from("configuracoes_fiscais")
     .select("onboarding_completed")
@@ -19,7 +18,6 @@ export default async function OnboardingPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FB] flex flex-col">
-      {/* Header minimalista */}
       <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 bg-[#1F4E79] rounded-lg flex items-center justify-center">
@@ -30,7 +28,6 @@ export default async function OnboardingPage() {
         <p className="text-xs text-gray-400">Configuração inicial</p>
       </header>
 
-      {/* Wizard */}
       <main className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg">
           <OnboardingWizard userId={user.id} />
