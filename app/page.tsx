@@ -157,7 +157,7 @@ export default function Home() {
             </p>
 
             {/* Mini stats */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {[
                 { v: "44%", l: "da fatura e do Estado" },
                 { v: "4×/ano", l: "prazos IVA que podes perder" },
@@ -263,7 +263,7 @@ export default function Home() {
             <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
 
               {/* Header row */}
-              <div className="grid grid-cols-4 bg-white/10 px-6 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <div className="hidden sm:grid grid-cols-4 bg-white/10 px-6 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest">
                 <span>Imposto</span>
                 <span className="text-center">Por fatura</span>
                 <span className="text-center">Por mes</span>
@@ -299,28 +299,56 @@ export default function Home() {
                   bg: "bg-orange-500/5",
                 },
               ].map((row) => (
-                <div key={row.name} className={`grid grid-cols-4 px-6 py-5 border-t border-white/5 items-center ${row.bg}`}>
-                  <div>
-                    <p className={`font-bold text-sm ${row.color}`}>{row.name}</p>
-                    <p className="text-xs text-gray-500 mt-0.5 leading-tight">{row.desc}</p>
+                <div key={row.name} className={`border-t border-white/5 ${row.bg}`}>
+                  {/* Mobile: 2 colunas */}
+                  <div className="sm:hidden px-4 py-4 flex items-center justify-between gap-3">
+                    <div>
+                      <p className={`font-bold text-sm ${row.color}`}>{row.name}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{row.desc}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className={`font-extrabold text-base ${row.color}`}>{row.anual}<span className="text-xs font-normal text-gray-400">/ano</span></p>
+                      <p className="text-xs text-gray-400">{row.perFatura}/fatura</p>
+                    </div>
                   </div>
-                  <p className="text-center text-white font-semibold text-sm">{row.perFatura}</p>
-                  <p className="text-center text-white font-semibold text-sm">{row.porMes}</p>
-                  <p className={`text-right font-extrabold text-base ${row.color}`}>{row.anual}</p>
+                  {/* Desktop: 4 colunas */}
+                  <div className="hidden sm:grid grid-cols-4 px-6 py-5 items-center">
+                    <div>
+                      <p className={`font-bold text-sm ${row.color}`}>{row.name}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 leading-tight">{row.desc}</p>
+                    </div>
+                    <p className="text-center text-white font-semibold text-sm">{row.perFatura}</p>
+                    <p className="text-center text-white font-semibold text-sm">{row.porMes}</p>
+                    <p className={`text-right font-extrabold text-base ${row.color}`}>{row.anual}</p>
+                  </div>
                 </div>
               ))}
 
               {/* Total row */}
-              <div className="grid grid-cols-4 px-6 py-5 border-t-2 border-red-500/40 bg-red-500/10 items-center">
-                <div>
-                  <p className="font-extrabold text-white text-sm">TOTAL A PAGAR</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Se nao guardaste nada</p>
+              <div className="border-t-2 border-red-500/40 bg-red-500/10">
+                {/* Mobile */}
+                <div className="sm:hidden px-4 py-4 flex items-center justify-between">
+                  <div>
+                    <p className="font-extrabold text-white text-sm">TOTAL A PAGAR</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Se nao guardaste nada</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-extrabold text-red-400 text-xl">€19.617</p>
+                    <p className="text-xs text-red-400/70">+ juros e coimas</p>
+                  </div>
                 </div>
-                <p className="text-center text-white font-extrabold">€1.635</p>
-                <p className="text-center text-white font-extrabold">€1.635/fatura</p>
-                <div className="text-right">
-                  <p className="font-extrabold text-red-400 text-2xl">€19.617</p>
-                  <p className="text-xs text-red-400/70 mt-0.5">+ juros e coimas</p>
+                {/* Desktop */}
+                <div className="hidden sm:grid grid-cols-4 px-6 py-5 items-center">
+                  <div>
+                    <p className="font-extrabold text-white text-sm">TOTAL A PAGAR</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Se nao guardaste nada</p>
+                  </div>
+                  <p className="text-center text-white font-extrabold">€1.635</p>
+                  <p className="text-center text-white font-extrabold">€1.635/fatura</p>
+                  <div className="text-right">
+                    <p className="font-extrabold text-red-400 text-2xl">€19.617</p>
+                    <p className="text-xs text-red-400/70 mt-0.5">+ juros e coimas</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1137,6 +1165,7 @@ export default function Home() {
 
       {/* ── FOOTER ───────────────────────────────────────────────────────── */}
       <footer className="border-t border-gray-800 py-10 bg-[#0f0f1a]">
+
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="space-y-1.5">
@@ -1153,7 +1182,6 @@ export default function Home() {
             </div>
 
             <div className="flex gap-6 text-sm text-gray-500">
-
               <a href="#" className="hover:text-white transition-colors">Privacidade</a>
               <a href="#" className="hover:text-white transition-colors">Termos</a>
               <a href="mailto:hello@freelancerpt.app" className="hover:text-white transition-colors">Contacto</a>

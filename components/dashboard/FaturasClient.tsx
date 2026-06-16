@@ -203,8 +203,8 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-          {/* Cabeçalho tabela */}
-          <div className="grid grid-cols-12 px-5 py-2.5 border-b border-gray-50 bg-gray-50/50">
+          {/* Cabeçalho tabela — só desktop */}
+          <div className="hidden sm:grid grid-cols-12 px-5 py-2.5 border-b border-gray-50 bg-gray-50/50">
             <p className="col-span-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Data</p>
             <p className="col-span-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Cliente</p>
             <p className="col-span-2 text-xs font-semibold text-gray-400 uppercase tracking-wider text-right">Base</p>
@@ -213,33 +213,61 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
           </div>
 
           <div className="divide-y divide-gray-50">
-            {faturas.map((f) => (
-              <div key={f.id} className="grid grid-cols-12 px-5 py-4 hover:bg-gray-50/50 group items-center">
-                <p className="col-span-3 text-sm text-gray-600">
-                  {new Date(f.data_fatura).toLocaleDateString("pt-PT")}
-                </p>
-                <p className="col-span-3 text-sm text-gray-900 font-medium truncate pr-2">
-                  {f.cliente || <span className="text-gray-400 font-normal">—</span>}
-                </p>
-                <p className="col-span-2 text-sm text-gray-600 text-right">
-                  €{f.valor_base.toFixed(2)}
-                </p>
-                <p className="col-span-2 text-sm font-semibold text-gray-900 text-right">
-                  €{f.valor_total.toFixed(2)}
-                </p>
-                <div className="col-span-2 flex items-center justify-end gap-2">
-                  <p className="text-sm font-bold text-red-500">
-                    €{(f.iva_a_guardar + f.irs_a_guardar + f.ss_a_guardar).toFixed(2)}
-                  </p>
-                  <button
-                    onClick={() => handleApagar(f.id)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:text-red-500 text-gray-300"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+            {faturas.map((f) => {
+              const reservar = f.iva_a_guardar + f.irs_a_guardar + f.ss_a_guardar;
+              return (
+                <div key={f.id} className="group">
+                  {/* Mobile: card */}
+                  <div className="sm:hidden px-4 py-3.5 flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-900 text-sm truncate">
+                        {f.cliente || <span className="text-gray-400 font-normal">Sem cliente</span>}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {new Date(f.data_fatura).toLocaleDateString("pt-PT")} · base €{f.valor_base.toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="text-right shrink-0 flex items-center gap-2">
+                      <div>
+                        <p className="font-bold text-gray-900 text-sm">€{f.valor_total.toFixed(2)}</p>
+                        <p className="text-xs font-semibold text-red-500">reservar €{reservar.toFixed(0)}</p>
+                      </div>
+                      <button
+                        onClick={() => handleApagar(f.id)}
+                        className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Desktop: tabela */}
+                  <div className="hidden sm:grid grid-cols-12 px-5 py-4 hover:bg-gray-50/50 items-center">
+                    <p className="col-span-3 text-sm text-gray-600">
+                      {new Date(f.data_fatura).toLocaleDateString("pt-PT")}
+                    </p>
+                    <p className="col-span-3 text-sm text-gray-900 font-medium truncate pr-2">
+                      {f.cliente || <span className="text-gray-400 font-normal">—</span>}
+                    </p>
+                    <p className="col-span-2 text-sm text-gray-600 text-right">
+                      €{f.valor_base.toFixed(2)}
+                    </p>
+                    <p className="col-span-2 text-sm font-semibold text-gray-900 text-right">
+                      €{f.valor_total.toFixed(2)}
+                    </p>
+                    <div className="col-span-2 flex items-center justify-end gap-2">
+                      <p className="text-sm font-bold text-red-500">€{reservar.toFixed(2)}</p>
+                      <button
+                        onClick={() => handleApagar(f.id)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:text-red-500 text-gray-300"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -258,7 +286,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
 
       {/* ── MODAL NOVA FATURA ─────────────────────────────────────────────────── */}
       {modalAberto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -266,7 +294,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
           />
 
           {/* Modal */}
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+          <div className="relative bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-md p-6 max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-5">
               <h2 className="font-bold text-gray-900 text-lg">Adicionar fatura</h2>
@@ -374,7 +402,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                   value={form.cliente}
                   onChange={(e) => setForm({ ...form, cliente: e.target.value })}
                   className="h-11"
-                />
+/>
               </div>
 
               {/* Número fatura (opcional) */}
@@ -415,7 +443,6 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     "Adicionar fatura"
-
                   )}
                 </Button>
               </div>

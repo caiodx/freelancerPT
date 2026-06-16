@@ -91,21 +91,21 @@ export default async function DashboardPage() {
       )}
 
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight truncate">
             {saudar(user.email ?? "")}
           </h1>
-          <p className="text-gray-500 text-sm mt-0.5">
+          <p className="text-gray-500 text-sm mt-0.5 capitalize">
             {new Date().toLocaleDateString("pt-PT", { weekday: "long", day: "numeric", month: "long" })}
           </p>
         </div>
         <Link
           href="/dashboard/faturas/nova"
-          className="flex items-center gap-2 bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors shrink-0"
+          className="flex items-center gap-2 bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold px-3 md:px-4 py-2.5 rounded-xl text-sm transition-colors shrink-0"
         >
           <Plus className="w-4 h-4" />
-          Nova fatura
+          <span className="hidden sm:inline">Nova fatura</span>
         </Link>
       </div>
 
@@ -197,9 +197,9 @@ export default async function DashboardPage() {
             className="inline-flex items-center gap-2 bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
           >
             <Plus className="w-4 h-4" />
-            Adicionar primeira fatura
-          </Link>
-        </div>
+              Adicionar primeira fatura
+            </Link>
+          </div>
       )}
 
     </div>
