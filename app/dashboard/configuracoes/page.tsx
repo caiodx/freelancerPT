@@ -7,7 +7,7 @@ export default async function ConfiguracoesPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const [{ data: config }, { data: perfil }, { data: subscricao }] = await Promise.all([
+  const [{ data: config }, { data: perfilRaw }, { data: subscricao }] = await Promise.all([
     supabase
       .from("configuracoes_fiscais")
       .select("*")
@@ -24,6 +24,8 @@ export default async function ConfiguracoesPage() {
       .eq("user_id", user.id)
       .single(),
   ]);
+
+  const perfil = perfilRaw as { nome: string } | null;
 
   return (
     <div className="p-6 lg:p-8 max-w-2xl mx-auto">
