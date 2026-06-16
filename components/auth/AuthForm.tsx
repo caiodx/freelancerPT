@@ -22,7 +22,10 @@ export function AuthForm({ mode = "login", redirectTo = "/dashboard" }: AuthForm
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const callbackUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/auth/callback?next=${redirectTo}`;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "");
+  const callbackUrl = `${baseUrl}/auth/callback?next=${redirectTo}`;
 
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
