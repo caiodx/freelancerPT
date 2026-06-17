@@ -29,6 +29,15 @@ export async function POST(request: NextRequest) {
     const numeroMatch = text.match(/Fatura-Recibo\s*<\s*(FR[^>]+)>/i);
     const numero = numeroMatch?.[1]?.trim() ?? null;
 
+    // ── Nome do cliente (adquirente) ──────────────────────────────────────
+    // Formato AT: "DADOS DO ADQUIRENTE ...\n\n<NOME>\nNOME\n"
+    // Quando anónimo a AT coloca " - - -"; nesse caso retornamos null
+    const adquirenteMatch = text.match(
+      /DADOS DO ADQUIRENTE DE BENS OU DE SERVI[ÇC]OS\s*\n\s*([^\n]+)\s*\nNOME/i
+    );
+    const nomeRaw = adquirenteMatch?.[1]?.trim() ?? null;
+    const cliente = nomeRaw && !/^[\s\-–—]+$/.test(nomeRaw) ? nomeRaw : null;
+
     // ── Data de emissão ───────────────────────────────────────────────────
     // "emitida em 05/06/2026"
     const dataMatch = text.match(/emitida em\s*(\d{2}\/\d{2}\/\d{4})/i);
@@ -102,6 +111,7 @@ export async function POST(request: NextRequest) {
       valor_iva,
       valor_total,
       retencao_irs,
+      cliente,
     });
   } catch (err: unknown) {
     console.error("[importar-fatura]", err);

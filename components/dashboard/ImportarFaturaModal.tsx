@@ -27,6 +27,7 @@ interface ParsedFatura {
   valor_iva: number | null;
   valor_total: number | null;
   retencao_irs: number;
+  cliente: string | null;
 }
 
 interface Props {
@@ -69,6 +70,8 @@ export function ImportarFaturaModal({ onClose, config, userId, onImported }: Pro
 
       const p = data as ParsedFatura;
       setParsed(p);
+      // Pré-preencher cliente extraído do PDF (editável pelo utilizador)
+      setCliente(p.cliente ?? "");
       // Auto-detectar retenção: se o PDF indica valor > 0 foi retido
       setTemRetencao((p.retencao_irs ?? 0) > 0);
       setStep("confirming");
