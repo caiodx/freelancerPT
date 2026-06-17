@@ -156,7 +156,15 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
 
   async function handleApagar(id: string) {
     if (!confirm("Tens a certeza que queres apagar esta fatura?")) return;
-    await supabase.from("faturas").update({ deleted_at: new Date().toISOString() }).eq("id", id);
+    const { error } = await supabase
+      .from("faturas")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", id);
+    if (error) {
+      console.error("handleApagar error:", error);
+      alert("Erro ao apagar fatura: " + error.message);
+      return;
+    }
     setFaturas((prev) => prev.filter((f) => f.id !== id));
     router.refresh();
   }
