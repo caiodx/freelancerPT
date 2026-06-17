@@ -6,11 +6,13 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { CofreRegisto } from "@/lib/supabase/types";
-import { Trash2, Pencil, X, Loader2, PiggyBank, AlertCircle } from "lucide-react";
+import type { CofreRegisto, ContaCofre } from "@/lib/supabase/types";
+import { Trash2, Pencil, X, Loader2, PiggyBank, AlertCircle, Wallet } from "lucide-react";
+import { CofreRegistarModal } from "@/components/dashboard/CofreRegistarModal";
 
 interface Props {
   registos: CofreRegisto[];
+  contas: ContaCofre[];
   userId: string;
   isentoIva: boolean;
 }
@@ -32,11 +34,12 @@ function fmt(n: number) {
   return n.toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-export function CofreRegistosClient({ registos: inicial, userId, isentoIva }: Props) {
+export function CofreRegistosClient({ registos: inicial, contas, userId, isentoIva }: Props) {
   const router = useRouter();
   const supabase = createClient();
 
   const [registos, setRegistos] = useState<CofreRegisto[]>(inicial);
+  const contasMap = Object.fromEntries(contas.map((c) => [c.id, c]));
   const [editando, setEditando] = useState<CofreRegisto | null>(null);
   const [form, setForm] = useState<FormEdit>({ tipo: "iva", valor: "", data: "", descricao: "" });
   const [loadingEdit, setLoadingEdit] = useState(false);
@@ -110,11 +113,14 @@ export function CofreRegistosClient({ registos: inicial, userId, isentoIva }: Pr
   return (
     <>
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Cofre Fiscal</h1>
-        <p className="text-sm text-gray-500 mt-0.5">
-          {registos.length} registo{registos.length !== 1 ? "s" : ""} guardado{registos.length !== 1 ? "s" : ""}
-        </p>
+      <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Cofre Fiscal</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
+            {registos.length} registo{registos.length !== 1 ? "s" : ""} guardado{registos.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+        <CofreRegistarModal userId={userId} contas={contas} />
       </div>
 
       {/* Totais */}
@@ -170,6 +176,13 @@ export function CofreRegistosClient({ registos: inicial, userId, isentoIva }: Pr
                     {r.descricao && <span className="ml-2 text-gray-300">·</span>}
                     {r.descricao && <span className="ml-2">{r.descricao}</span>}
                   </p>
+                  {r.conta_id && contasMap[r.conta_id] && (
+                    <p className="text-[10px] text-[#1F4E79] flex items-center gap-1 mt-0.5">
+                      <Wallet className="w-2.5 h-2.5" />
+                      {contasMap[r.conta_id].nome}
+                      {contasMap[r.conta_id].banco && <span className="text-gray-400"> — {contasMap[r.conta_id].banco}</span>}
+                    </p>
+                  )}
                 </div>
 
                 {/* Acções */}

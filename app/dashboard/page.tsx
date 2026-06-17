@@ -7,7 +7,7 @@ import { BannerTrial } from "@/components/dashboard/BannerTrial";
 import { CofreRegistarModal } from "@/components/dashboard/CofreRegistarModal";
 import { Bell, Plus } from "lucide-react";
 import Link from "next/link";
-import type { ConfiguracoesFiscais, Fatura, CofreRegisto, Subscricao } from "@/lib/supabase/types";
+import type { ConfiguracoesFiscais, Fatura, CofreRegisto, Subscricao, ContaCofre } from "@/lib/supabase/types";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -32,6 +32,7 @@ export default async function DashboardPage() {
     { data: faturasRaw },
     { data: cofre },
     { data: subscricao },
+    { data: contasCofre },
   ] = await Promise.all([
     supabase
       .from("configuracoes_fiscais")
@@ -53,10 +54,16 @@ export default async function DashboardPage() {
       .select("*")
       .eq("user_id", user.id)
       .single(),
+    supabase
+      .from("contas_cofre")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true }),
   ]);
 
   const faturas: Fatura[] = faturasRaw ?? [];
   const cofreRegistos: CofreRegisto[] = cofre ?? [];
+  const contas: ContaCofre[] = contasCofre ?? [];
   const cfg = config as ConfiguracoesFiscais | null;
   const sub = subscricao as Subscricao | null;
 
@@ -133,7 +140,7 @@ export default async function DashboardPage() {
             } : undefined}
           />
           <div className="flex justify-end">
-            <CofreRegistarModal userId={user.id} />
+            <CofreRegistarModal userId={user.id} contas={contas} />
           </div>
         </div>
 

@@ -1,13 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { CofreRegistosClient } from "@/components/dashboard/CofreRegistosClient";
+import { CofreRegistarModal } from "@/components/dashboard/CofreRegistarModal";
 
 export default async function CofrePage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const [{ data: registos }, { data: config }] = await Promise.all([
+  const [{ data: registos }, { data: config }, { data: contas }] = await Promise.all([
     supabase
       .from("cofre_registos")
       .select("*")
@@ -18,12 +19,18 @@ export default async function CofrePage() {
       .select("*")
       .eq("user_id", user.id)
       .single(),
+    supabase
+      .from("contas_cofre")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true }),
   ]);
 
   return (
     <div className="p-6 lg:p-8 max-w-4xl mx-auto">
       <CofreRegistosClient
         registos={registos ?? []}
+        contas={contas ?? []}
         userId={user.id}
         isentoIva={config?.isento_iva ?? false}
       />

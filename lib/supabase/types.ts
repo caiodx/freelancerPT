@@ -134,6 +134,32 @@ export type Database = {
         };
         Relationships: [];
       };
+      contas_cofre: {
+        Row: {
+          id: string;
+          user_id: string;
+          nome: string;
+          banco: string | null;
+          iban: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          nome: string;
+          banco?: string | null;
+          iban?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          nome?: string;
+          banco?: string | null;
+          iban?: string | null;
+        };
+        Relationships: [];
+      };
       cofre_registos: {
         Row: {
           id: string;
@@ -142,6 +168,7 @@ export type Database = {
           valor: number;
           descricao: string | null;
           data: string;
+          conta_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -151,6 +178,7 @@ export type Database = {
           valor: number;
           descricao?: string | null;
           data?: string;
+          conta_id?: string | null;
           created_at?: string;
         };
         Update: {
@@ -160,6 +188,7 @@ export type Database = {
           valor?: number;
           descricao?: string | null;
           data?: string;
+          conta_id?: string | null;
         };
         Relationships: [];
       };
@@ -225,11 +254,12 @@ export type Database = {
 
 // ─── Tipos derivados para uso na aplicação ────────────────────
 
-export type UserProfile        = Database["public"]["Tables"]["users"]["Row"];
+export type UserProfile          = Database["public"]["Tables"]["users"]["Row"];
 export type ConfiguracoesFiscais = Database["public"]["Tables"]["configuracoes_fiscais"]["Row"];
-export type Fatura             = Database["public"]["Tables"]["faturas"]["Row"];
-export type CofreRegisto       = Database["public"]["Tables"]["cofre_registos"]["Row"];
-export type Subscricao         = Database["public"]["Tables"]["subscricoes"]["Row"];
+export type Fatura               = Database["public"]["Tables"]["faturas"]["Row"];
+export type ContaCofre           = Database["public"]["Tables"]["contas_cofre"]["Row"];
+export type CofreRegisto         = Database["public"]["Tables"]["cofre_registos"]["Row"];
+export type Subscricao           = Database["public"]["Tables"]["subscricoes"]["Row"];
 
 // ─── Agregados usados no dashboard ───────────────────────────
 
