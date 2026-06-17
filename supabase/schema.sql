@@ -108,10 +108,23 @@ create policy "config: own only"
   on public.configuracoes_fiscais for all
   using (auth.uid() = user_id);
 
--- Faturas: só o próprio utilizador, excluir soft-deleted
-create policy "faturas: own only"
-  on public.faturas for all
+-- Faturas: políticas separadas por operação (necessário para soft-delete funcionar)
+-- O WITH CHECK de FOR ALL bloqueia updates que mudam deleted_at para NOT NULL
+create policy "faturas: select own"
+  on public.faturas for select
   using (auth.uid() = user_id and deleted_at is null);
+
+create policy "faturas: insert own"
+  on public.faturas for insert
+  with check (auth.uid() = user_id);
+
+create policy "faturas: update own"
+  on public.faturas for update
+  using (auth.uid() = user_id);
+
+create policy "faturas: delete own"
+  on public.faturas for delete
+  using (auth.uid() = user_id);
 
 -- Cofre: só o próprio utilizador
 create policy "cofre: own only"
