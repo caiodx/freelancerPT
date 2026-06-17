@@ -11,12 +11,14 @@ import {
   LogOut,
   Shield,
   ChevronRight,
+  PiggyBank,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/dashboard", label: "Início", icon: LayoutDashboard, exact: true },
   { href: "/dashboard/faturas", label: "Faturas", icon: FileText },
+  { href: "/dashboard/cofre", label: "Cofre", icon: PiggyBank },
   { href: "/dashboard/prazos", label: "Prazos", icon: Calendar },
   { href: "/dashboard/configuracoes", label: "Config", icon: Settings },
 ];
