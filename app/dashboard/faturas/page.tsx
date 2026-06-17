@@ -12,6 +12,7 @@ export default async function FaturasPage() {
       .from("faturas")
       .select("*")
       .eq("user_id", user.id)
+      .is("deleted_at", null)
       .order("data_fatura", { ascending: false }),
     supabase
       .from("configuracoes_fiscais")

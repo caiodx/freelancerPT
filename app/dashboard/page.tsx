@@ -42,6 +42,7 @@ export default async function DashboardPage() {
       .from("faturas")
       .select("*")
       .eq("user_id", user.id)
+      .is("deleted_at", null)
       .order("data_fatura", { ascending: false }),
     supabase
       .from("cofre_registos")

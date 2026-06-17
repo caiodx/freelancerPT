@@ -118,9 +118,12 @@ export type Database = {
           id?: string;
           user_id?: string;
           valor_base?: number;
+          valor_iva?: number;
+          valor_total?: number;
           iva_a_guardar?: number;
           irs_a_guardar?: number;
           ss_a_guardar?: number;
+          tem_retencao?: boolean;
           data_fatura?: string;
           cliente?: string | null;
           descricao?: string | null;
