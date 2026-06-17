@@ -39,8 +39,8 @@ export function Sidebar() {
     <>
       {/* ── DESKTOP SIDEBAR ─────────────────────────────────────────────── */}
       <aside className="hidden md:flex w-60 shrink-0 bg-[#0F1F33] min-h-screen flex-col">
-        {/* Logo */}
-        <div className="px-5 py-5 border-b border-white/5">
+        {/* Logo + Logout no topo */}
+        <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-[#1F4E79] rounded-lg flex items-center justify-center">
               <Shield className="w-4 h-4 text-white" />
@@ -49,6 +49,13 @@ export function Sidebar() {
               freelancer<span className="text-[#BF4700]">PT</span>
             </span>
           </Link>
+          <button
+            onClick={handleLogout}
+            title="Sair"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Nav */}
@@ -73,17 +80,6 @@ export function Sidebar() {
             );
           })}
         </nav>
-
-        {/* Logout */}
-        <div className="px-3 pb-5 border-t border-white/5 pt-4">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/40 hover:text-white hover:bg-white/5 transition-colors"
-          >
-            <LogOut className="w-4 h-4 shrink-0" />
-            Sair
-          </button>
-        </div>
       </aside>
 
       {/* ── MOBILE BOTTOM NAV ───────────────────────────────────────────── */}
