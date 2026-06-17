@@ -209,7 +209,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      soft_delete_fatura: {
+        Args: { fatura_id: string };
+        Returns: void;
+      };
     };
     Enums: {
       [_ in never]: never;

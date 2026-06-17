@@ -156,12 +156,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
 
   async function handleApagar(id: string) {
     if (!confirm("Tens a certeza que queres apagar esta fatura?")) return;
-    const { data: { session } } = await supabase.auth.getSession();
-    console.log("handleApagar session uid:", session?.user?.id ?? "NULL — sem sessão no browser client");
-    const { error } = await supabase
-      .from("faturas")
-      .update({ deleted_at: new Date().toISOString() })
-      .eq("id", id);
+    const { error } = await supabase.rpc("soft_delete_fatura", { fatura_id: id });
     if (error) {
       console.error("handleApagar error:", error);
       alert("Erro ao apagar fatura: " + error.message);
