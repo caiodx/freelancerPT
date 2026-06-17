@@ -4,6 +4,7 @@ import { CofreFiscal } from "@/components/CofreFiscal";
 import { PrazosWidget } from "@/components/dashboard/PrazosWidget";
 import { ResumoMensalWidget } from "@/components/dashboard/ResumoMensalWidget";
 import { BannerTrial } from "@/components/dashboard/BannerTrial";
+import { CofreRegistarModal } from "@/components/dashboard/CofreRegistarModal";
 import { Bell, Plus } from "lucide-react";
 import Link from "next/link";
 import type { ConfiguracoesFiscais, Fatura, CofreRegisto, Subscricao } from "@/lib/supabase/types";
@@ -113,7 +114,7 @@ export default async function DashboardPage() {
       <div className="grid xl:grid-cols-3 gap-6">
 
         {/* Cofre Fiscal — ocupa 2 colunas */}
-        <div className="xl:col-span-2">
+        <div className="xl:col-span-2 space-y-3">
           <CofreFiscal
             readOnly
             titulo="O teu cofre fiscal"
@@ -130,11 +131,17 @@ export default async function DashboardPage() {
               isencaoPrimeiroAnoSS: cfg.primeiro_ano,
             } : undefined}
           />
+          <div className="flex justify-end">
+            <CofreRegistarModal userId={user.id} />
+          </div>
         </div>
 
         {/* Prazos — coluna direita */}
         <div>
-          <PrazosWidget />
+          <PrazosWidget
+            isentoIva={cfg?.isento_iva ?? false}
+            primeiroAno={cfg?.primeiro_ano ?? false}
+          />
         </div>
       </div>
 
@@ -197,9 +204,9 @@ export default async function DashboardPage() {
             className="inline-flex items-center gap-2 bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
           >
             <Plus className="w-4 h-4" />
-              Adicionar primeira fatura
-            </Link>
-          </div>
+            Adicionar primeira fatura
+          </Link>
+        </div>
       )}
 
     </div>

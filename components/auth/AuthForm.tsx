@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Chrome, Mail, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Chrome, Mail, Loader2, CheckCircle2, AlertCircle, FlaskConical } from "lucide-react";
+
+const DEMO_EMAIL = "teste@freelancerpt.app";
+const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_PASSWORD ?? "demo2026freelancerpt";
 
 type Mode = "login" | "register";
 
@@ -16,11 +20,14 @@ interface AuthFormProps {
 
 export function AuthForm({ mode = "login", redirectTo = "/dashboard" }: AuthFormProps) {
   const supabase = createClient();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isDemo = email.trim().toLowerCase() === DEMO_EMAIL;
 
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
@@ -33,6 +40,22 @@ export function AuthForm({ mode = "login", redirectTo = "/dashboard" }: AuthForm
 
     setLoading(true);
     setError(null);
+
+    // Utilizador demo — acesso direto com password
+    if (isDemo) {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: DEMO_EMAIL,
+        password: DEMO_PASSWORD,
+      });
+      setLoading(false);
+      if (error) {
+        setError("Conta demo indisponível. Tenta mais tarde.");
+      } else {
+        router.push(redirectTo);
+        router.refresh();
+      }
+      return;
+    }
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -138,6 +161,16 @@ export function AuthForm({ mode = "login", redirectTo = "/dashboard" }: AuthForm
           />
         </div>
 
+        {/* Banner demo */}
+        {isDemo && (
+          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5">
+            <FlaskConical className="w-4 h-4 text-amber-600 shrink-0" />
+            <p className="text-xs text-amber-700 font-medium">
+              Conta demo — acesso imediato ao sistema completo.
+            </p>
+          </div>
+        )}
+
         {error && (
           <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 rounded-lg px-3 py-2.5">
             <AlertCircle className="w-4 h-4 shrink-0" />
@@ -147,20 +180,29 @@ export function AuthForm({ mode = "login", redirectTo = "/dashboard" }: AuthForm
 
         <Button
           type="submit"
-          className="w-full h-11 bg-[#BF4700] hover:bg-[#a33a00] font-bold"
+          className="w-full h-11 font-bold"
+          style={{ background: isDemo ? "#d97706" : "#BF4700" }}
           disabled={loading || !email}
         >
           {loading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : isDemo ? (
+            <FlaskConical className="w-4 h-4 mr-2" />
           ) : (
             <Mail className="w-4 h-4 mr-2" />
           )}
-          {mode === "register" ? "Criar conta — receber link" : "Entrar com link mágico"}
+          {isDemo
+            ? "Entrar como utilizador demo"
+            : mode === "register"
+            ? "Criar conta — receber link"
+            : "Entrar com link mágico"}
         </Button>
       </form>
 
       <p className="text-xs text-center text-gray-400">
-        Sem passwords. Enviamos um link para o teu email — um clique e entras.
+        {isDemo
+          ? "Conta partilhada para testes — os dados podem ser alterados por outros utilizadores."
+          : "Sem passwords. Enviamos um link para o teu email — um clique e entras."}
       </p>
     </div>
   );
