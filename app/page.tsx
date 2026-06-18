@@ -30,6 +30,7 @@ import {
   TrendingUp,
   Euro,
   Timer,
+  Calendar,
 } from "lucide-react";
 
 // ─── Avatar with initials ──────────────────────────────────────────────────────
@@ -70,28 +71,25 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* ── BANNER ANEXO J ───────────────────────────────────────────────── */}
-      <div className="bg-amber-500 text-white text-center py-2.5 text-sm font-medium">
-        <span className="font-extrabold">🚨 AT notificou +6.000 brasileiros sobre Anexo J —</span>
-        {" "}
-        <a
-          href="/blog/at-notificou-brasileiros-anexo-j"
-          className="underline underline-offset-2 font-semibold hover:text-amber-100 transition-colors"
-        >
-          Saiba o que fazer agora →
-        </a>
-      </div>
-
-      {/* ── URGENCY BAR ──────────────────────────────────────────────────── */}
-      <div className="bg-[#BF4700] text-white text-center py-2.5 text-sm font-medium">
-        <span className="font-extrabold">⚠ Proximo prazo IVA: 20 de Agosto</span>
-        &nbsp;&mdash;&nbsp;72 dias para entregar o trimestre.&nbsp;
-        <a
-          href="#calculadora"
-          className="underline underline-offset-2 font-semibold hover:text-orange-200 transition-colors"
-        >
-          Ja separaste o dinheiro?
-        </a>
+      {/* ── BANNER TOPO ──────────────────────────────────────────────────── */}
+      <div className="bg-[#BF4700] text-white py-2.5 text-sm font-medium">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-center gap-x-4 gap-y-1 text-center sm:text-left">
+          <span>
+            <span className="font-extrabold">🚨 AT notificou +6.000 brasileiros sobre Anexo J</span>
+            {" — "}
+            <a href="/blog/at-notificou-brasileiros-anexo-j" className="underline underline-offset-2 font-semibold hover:text-orange-200 transition-colors">
+              Saiba o que fazer →
+            </a>
+          </span>
+          <span className="hidden sm:inline text-white/40">|</span>
+          <span>
+            <span className="font-extrabold">⚠ Proximo prazo IVA: 20 Agosto</span>
+            {" — "}
+            <a href="#calculadora" className="underline underline-offset-2 font-semibold hover:text-orange-200 transition-colors">
+              Ja separaste?
+            </a>
+          </span>
+        </div>
       </div>
 
       {/* ── NAVIGATION ───────────────────────────────────────────────────── */}
@@ -114,6 +112,7 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-8 text-sm text-gray-600">
             <a href="#perdes" className="hover:text-[#1F4E79] transition-colors font-medium">O que perdes</a>
             <a href="#como-funciona" className="hover:text-[#1F4E79] transition-colors font-medium">Como funciona</a>
+            <a href="#funcionalidades" className="hover:text-[#1F4E79] transition-colors font-medium">Funcionalidades</a>
             <a href="#precos" className="hover:text-[#1F4E79] transition-colors font-medium">Precos</a>
             <a href="#faq" className="hover:text-[#1F4E79] transition-colors font-medium">FAQ</a>
           </div>
@@ -543,7 +542,7 @@ export default function Home() {
               Como funciona
             </Badge>
             <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
-              3 passos. <span className="text-[#1F4E79]">30 segundos.</span> Problema resolvido.
+              4 passos. <span className="text-[#1F4E79]">Controlo total.</span> Zero surpresas.
             </h2>
             <p className="text-gray-600 max-w-xl mx-auto text-lg">
               Nao precisas de saber nada sobre impostos. O FreelancerPT sabe por ti.
@@ -564,15 +563,22 @@ export default function Home() {
                   num: "02",
                   icon: <Calculator className="w-5 h-5 text-white" />,
                   title: "Sabes o que guardar",
-                  desc: "Ves em tempo real: aqui esta o IVA para separar, o IRS para reservar, o SS para provisionar. E em destaque: o teu liquido real.",
+                  desc: "Ves em tempo real o IVA para separar, o IRS para reservar, o SS para provisionar. E em destaque: o teu liquido real — o que e MESMO teu.",
                   highlight: "Nunca mais gastas dinheiro que nao e teu",
                 },
                 {
                   num: "03",
                   icon: <Bell className="w-5 h-5 text-white" />,
                   title: "Recebes alertas a tempo",
-                  desc: "30, 15 e 7 dias antes de cada prazo do fisco recebes um email. IVA trimestral, IRS anual, SS mensal. Nunca mais coimas.",
+                  desc: "O calendario fiscal mostra IVA trimestral, IRS anual e SS mensal. 30, 15 e 7 dias antes do prazo recebes email. Nunca mais coimas.",
                   highlight: "€200 de coima evitada por prazo",
+                },
+                {
+                  num: "04",
+                  icon: <CheckCircle className="w-5 h-5 text-white" />,
+                  title: "Pagas com um clique",
+                  desc: "Quando chega o prazo, carregas em \"Paguei\" — o cofre regista o pagamento, atualiza o saldo e confirma que esta limpo. Paz de espirito total.",
+                  highlight: "Do cofre para o fisco em segundos",
                 },
               ].map((step) => (
                 <div key={step.num} className="flex gap-5">
@@ -624,7 +630,7 @@ export default function Home() {
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 bg-[#1F4E79]/10 border border-[#1F4E79]/20 rounded-full px-4 py-1.5">
                 <span className="text-[#1F4E79] font-bold text-xs uppercase tracking-widest">
-                  Nova funcionalidade
+                  Recurso principal
                 </span>
               </div>
               <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight">
@@ -712,6 +718,155 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRAZOS FISCAIS ───────────────────────────────────────────────── */}
+      <section id="prazos" className="py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
+
+            {/* Texto */}
+            <div className="space-y-6 lg:order-2">
+              <div className="inline-flex items-center gap-2 bg-[#BF4700]/10 border border-[#BF4700]/20 rounded-full px-4 py-1.5">
+                <span className="text-[#BF4700] font-bold text-xs uppercase tracking-widest">
+                  Exclusivo FreelancerPT
+                </span>
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight">
+                O calendario fiscal ja esta feito.{" "}
+                <span className="text-[#BF4700]">Tu so carregas em &ldquo;Paguei&rdquo;.</span>
+              </h2>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Nao precisas de saber quando e o proximo prazo do IVA, do IRS ou da Seguranca Social.
+                O FreelancerPT gera automaticamente o teu calendario fiscal personalizado — e quando
+                chegar o dia, confirmas o pagamento com um clique.
+              </p>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    icon: <BarChart3 className="w-4 h-4 text-[#1F4E79]" />,
+                    title: "IVA trimestral — 4 prazos/ano",
+                    desc: "Maio, Agosto, Novembro e Fevereiro. Nunca mais calculas as datas.",
+                    color: "bg-[#1F4E79]/10",
+                  },
+                  {
+                    icon: <TrendingUp className="w-4 h-4 text-[#1E7145]" />,
+                    title: "IRS anual — 30 de Junho",
+                    desc: "Podes pagar em ate 36 prestacoes. O FreelancerPT ajuda-te a calcular.",
+                    color: "bg-[#1E7145]/10",
+                  },
+                  {
+                    icon: <Euro className="w-4 h-4 text-purple-600" />,
+                    title: "SS mensal — dia 20",
+                    desc: "Os proximos 6 meses gerados automaticamente. Um clique por mes.",
+                    color: "bg-purple-100",
+                  },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${item.color}`}>
+                      {item.icon}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 text-sm">{item.title}</p>
+                      <p className="text-gray-500 text-sm">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-start gap-3 bg-[#BF4700]/5 border border-[#BF4700]/15 rounded-xl px-4 py-3.5">
+                <AlertTriangle className="w-4 h-4 text-[#BF4700] shrink-0 mt-0.5" />
+                <p className="text-sm text-gray-700">
+                  <strong className="text-[#BF4700]">Diferencial chave:</strong> o pagamento e registado diretamente do cofre.
+                  O saldo atualiza em tempo real — sabes sempre quanto ainda tens guardado para o proximo prazo.
+                </p>
+              </div>
+            </div>
+
+            {/* Visual dos prazos */}
+            <div className="lg:order-1 space-y-3">
+              {/* Card destaque proximo prazo */}
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="w-4 h-4 text-amber-600" />
+                  <p className="text-xs font-bold text-amber-600 uppercase tracking-widest">Proximo prazo</p>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-bold text-white bg-[#1F4E79] px-2 py-0.5 rounded">IVA</span>
+                      <p className="font-bold text-gray-900">IVA 2.o Trimestre 2026</p>
+                    </div>
+                    <p className="text-sm text-amber-700">20 de Agosto — 62 dias</p>
+                    <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-100 rounded-lg px-2.5 py-1 w-fit">
+                      <Shield className="w-3 h-3" />
+                      €690 no cofre IVA
+                    </div>
+                  </div>
+                  <div className="shrink-0">
+                    <div className="bg-[#1F4E79] text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-md">
+                      <CheckCircle className="w-4 h-4" />
+                      Paguei
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* SS mensal colapsado */}
+              <div className="bg-white border border-gray-100 rounded-2xl p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
+                      <span className="text-[10px] font-extrabold text-purple-600 uppercase">SS</span>
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900 text-sm">Seguranca Social mensal</p>
+                      <p className="text-xs text-gray-400">6 pagamentos · proximo: 20 Jul</p>
+                    </div>
+                  </div>
+                  <div className="bg-purple-600 text-white font-bold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 shrink-0">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    Paguei
+                  </div>
+                </div>
+              </div>
+
+              {/* IRS */}
+              <div className="bg-white border border-gray-100 rounded-2xl p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
+                      <span className="text-[10px] font-extrabold text-[#1E7145] uppercase">IRS</span>
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900 text-sm">IRS 2025 — Modelo 3</p>
+                      <p className="text-xs text-gray-400">30 de Junho 2026 · ate 36 prestacoes</p>
+                    </div>
+                  </div>
+                  <div className="bg-[#1E7145] text-white font-bold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 shrink-0">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    Paguei
+                  </div>
+                </div>
+              </div>
+
+              {/* Lock overlay CTA */}
+              <div className="bg-gradient-to-b from-gray-50 to-white border border-dashed border-gray-200 rounded-2xl p-5 text-center">
+                <Lock className="w-5 h-5 text-gray-300 mx-auto mb-2" />
+                <p className="text-sm font-semibold text-gray-500 mb-1">O teu calendario fiscal personalizado</p>
+                <p className="text-xs text-gray-400 mb-3">Com base no teu perfil: isento IVA? 1.o ano SS? Retencao?</p>
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-2 bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+                >
+                  Ver os meus prazos
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </div>
@@ -811,7 +966,7 @@ export default function Home() {
       </section>
 
       {/* ── FUNCIONALIDADES ──────────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section id="funcionalidades" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-3 tracking-tight">
@@ -827,44 +982,44 @@ export default function Home() {
               {
                 icon: <BarChart3 className="w-6 h-6 text-[#1F4E79]" />,
                 title: "Dashboard em tempo real",
-                desc: "Quanto ja faturaste, quanto guardaste, projecao de IRS para o ano. Tudo visivel. Sem surpresas.",
+                desc: "Quanto ja faturaste, quanto guardaste por imposto, situacao fiscal do ano. Tudo visivel. Sem surpresas.",
                 badge: "Critico",
                 badgeColor: "bg-red-100 text-red-700",
               },
               {
+                icon: <Calendar className="w-6 h-6 text-[#1F4E79]" />,
+                title: "Calendario fiscal personalizado",
+                desc: "IVA trimestral, IRS anual e SS mensal gerados automaticamente com base no teu perfil. Com botao \"Paguei\" integrado.",
+                badge: "Exclusivo",
+                badgeColor: "bg-[#BF4700]/10 text-[#BF4700]",
+              },
+              {
+                icon: <Shield className="w-6 h-6 text-[#1F4E79]" />,
+                title: "Cofre fiscal — livro-razao",
+                desc: "Registas reservas e pagamentos por imposto (IVA, IRS, SS). O saldo atualiza em tempo real. Sabes sempre o que ja esta guardado.",
+                badge: "Novo",
+                badgeColor: "bg-blue-100 text-blue-700",
+              },
+              {
                 icon: <Bell className="w-6 h-6 text-[#1F4E79]" />,
                 title: "Alertas de prazo automaticos",
-                desc: "Emails a 30, 15 e 7 dias de cada prazo. IVA trimestral, IRS anual, SS. Nunca mais multas.",
+                desc: "Emails a 30, 15 e 7 dias de cada prazo. IVA trimestral, IRS anual, SS mensal. Nunca mais multas.",
                 badge: "Poupa €200+/ano",
                 badgeColor: "bg-green-100 text-green-700",
               },
               {
-                icon: <Shield className="w-6 h-6 text-[#1F4E79]" />,
-                title: "Regras fiscais 2026 verificadas",
-                desc: "Regime simplificado, Art. 53.o, retencao na fonte, isencao SS 1.o ano. Todos os casos cobertos.",
-                badge: "Atualizado",
-                badgeColor: "bg-blue-100 text-blue-700",
-              },
-              {
                 icon: <Zap className="w-6 h-6 text-[#1F4E79]" />,
                 title: "Calculo em segundos",
-                desc: "Emites a fatura, o FreelancerPT calcula. Sem formulas. Sem Excel. Sem erro humano.",
+                desc: "Emites a fatura, o FreelancerPT calcula IVA, IRS e SS. Sem formulas. Sem Excel. Sem erro humano. Com filtro por mes.",
                 badge: "30 segundos",
                 badgeColor: "bg-[#1F4E79]/10 text-[#1F4E79]",
               },
               {
                 icon: <Lock className="w-6 h-6 text-[#1F4E79]" />,
-                title: "Dados seguros e privados",
-                desc: "Os teus dados nunca sao partilhados. Servidores na Europa, conformidade RGPD.",
+                title: "Regras fiscais 2026 verificadas",
+                desc: "Regime simplificado, Art. 53.o, retencao na fonte, isencao SS 1.o ano. Todos os casos cobertos. Atualizado para 2026.",
                 badge: "RGPD",
                 badgeColor: "bg-gray-100 text-gray-700",
-              },
-              {
-                icon: <Users className="w-6 h-6 text-[#1F4E79]" />,
-                title: "Suporte em portugues (PT)",
-                desc: "Equipa que entende os freelancers imigrantes em Portugal. Suporte rapido por email.",
-                badge: "Humano",
-                badgeColor: "bg-amber-100 text-amber-700",
               },
             ].map((item, i) => (
               <div
@@ -989,10 +1144,12 @@ export default function Home() {
               <CardContent className="space-y-3">
                 {[
                   "Calculadora ilimitada",
-                  "Dashboard completo",
+                  "Dashboard em tempo real",
+                  "Cofre fiscal com livro-razao",
+                  "Calendario fiscal personalizado",
+                  "Botao \"Paguei\" por prazo",
                   "Alertas de prazo por email",
-                  "Simulador de IRS anual",
-                  "Export CSV de historico",
+                  "Filtro de faturas por mes",
                   "Suporte por email",
                 ].map((f) => (
                   <div key={f} className="flex items-center gap-3 text-sm text-gray-700">
@@ -1035,7 +1192,7 @@ export default function Home() {
                   "2 meses gratis",
                   "Suporte prioritario",
                   "Acesso antecipado a novas features",
-                  "Historico ilimitado",
+                  "Historico ilimitado de faturas",
                 ].map((f) => (
                   <div key={f} className="flex items-center gap-3 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-[#1E7145] shrink-0" />
@@ -1087,7 +1244,7 @@ export default function Home() {
               },
               {
                 q: "Funciona se estiver isento de IVA (Art. 53.o)?",
-                a: "Sim. Na configuracao fiscal podes activar 'Isento de IVA'. O calculo ajusta-se automaticamente: o IVA e removido, e so calculas IRS e SS. O limite de isenção e €15.000/ano em clientes nacionais.",
+                a: "Sim. Na configuracao fiscal podes activar 'Isento de IVA'. O calculo ajusta-se automaticamente: o IVA e removido, e so calculas IRS e SS. O limite de isencao e €15.000/ano em clientes nacionais.",
               },
               {
                 q: "E se o meu cliente ja retiver o IRS na fonte?",
@@ -1096,6 +1253,10 @@ export default function Home() {
               {
                 q: "Os calculos estao atualizados para 2026?",
                 a: "Sim. Todas as taxas e regras (IVA 23%, coeficiente simplificado 75%, IRS estimado 22%, SS 21,4% x 70%) estao verificadas para 2026. O calendario fiscal inclui todos os prazos do ano.",
+              },
+              {
+                q: "Como funciona o botao 'Paguei' nos prazos?",
+                a: "Quando chega o dia de pagar ao fisco, abres o calendario fiscal, carregas em 'Paguei' no prazo correspondente e confirmas o valor pago. O cofre regista automaticamente o pagamento e atualiza o teu saldo — se tinhas €1.200 reservados e pagaste €1.000, ficam €200 guardados para o proximo prazo. Nao precisas de apagar os registos antigos.",
               },
             ].map((item, i) => (
               <div
@@ -1121,10 +1282,9 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#1E7145]/10 translate-y-1/2 -translate-x-1/2" />
 
         <div className="relative max-w-3xl mx-auto px-6 text-center space-y-7">
-          {/* Urgency */}
           <div className="inline-flex items-center gap-2 bg-[#BF4700]/20 border border-[#BF4700]/30 rounded-full px-5 py-2">
             <Timer className="w-4 h-4 text-[#BF4700]" />
-            <span className="text-[#BF4700] font-bold text-sm">Proximo prazo IVA: 20 Agosto &mdash; 72 dias</span>
+            <span className="text-[#BF4700] font-bold text-sm">Proximo prazo IVA: 20 Agosto &mdash; 62 dias</span>
           </div>
 
           <h2 className="text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight">
@@ -1165,7 +1325,6 @@ export default function Home() {
 
       {/* ── FOOTER ───────────────────────────────────────────────────────── */}
       <footer className="border-t border-gray-800 py-10 bg-[#0f0f1a]">
-
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="space-y-1.5">
