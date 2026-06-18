@@ -30,7 +30,7 @@ export function Sidebar() {
   return (
     <>
       {/* ── DESKTOP SIDEBAR ─────────────────────────────────────────────── */}
-      <aside className="hidden md:flex w-60 shrink-0 bg-[#0F1F33] min-h-screen flex-col">
+      <aside className="hidden md:flex w-60 shrink-0 bg-[#0F1F33] h-screen sticky top-0 flex-col">
         {/* Logo */}
         <div className="px-5 py-4 border-b border-white/5">
           <Link href="/dashboard" className="flex items-center gap-2.5">
@@ -44,7 +44,7 @@ export function Sidebar() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-0.5">
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
           {links.map(({ href, label, icon: Icon, exact }) => {
             const isActive = exact ? pathname === href : pathname.startsWith(href);
             return (
