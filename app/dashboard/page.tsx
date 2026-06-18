@@ -226,7 +226,7 @@ export default async function DashboardPage() {
             Adiciona a tua primeira fatura para o cofre começar a calcular.
           </p>
           <Link
-            href="/dashboar/faturas/nova"
+            href="/dashboard/faturas/nova"
             className="inline-flex items-center gap-2 bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
           >
             <Plus className="w-4 h-4" />

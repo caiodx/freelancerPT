@@ -7,22 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { ContaCofre } from "@/lib/supabase/types";
-import { PlusCircle, X, Loader2, CheckCircle2, PiggyBank, Wallet, Plus, ChevronDown, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+import { PlusCircle, X, Loader2, CheckCircle2, PiggyBank, Wallet, Plus, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type TipoCofre = "iva" | "irs" | "ss";
-type Movimento = "reserva" | "pagamento";
 
 const TIPOS: { value: TipoCofre; label: string; cor: string; desc: string }[] = [
   { value: "iva", label: "IVA",  cor: "#1F4E79", desc: "IVA cobrado nas faturas" },
   { value: "irs", label: "IRS",  cor: "#1E7145", desc: "Reserva para o Modelo 3" },
-  { value: "ss",  label: "SS",   cor: "#7C3AED", desc: "Segurança Social mensal" },
+  { value: "ss",  label: "SS",   cor: "#7C3AED", desc: "Seguranca Social mensal" },
 ];
 
 interface CofreRegistarModalProps {
   userId: string;
   tipoInicial?: TipoCofre;
-  movimentoInicial?: Movimento;
   contas?: ContaCofre[];
   trigger?: React.ReactNode;
   onSucesso?: () => void;
@@ -31,7 +29,6 @@ interface CofreRegistarModalProps {
 export function CofreRegistarModal({
   userId,
   tipoInicial,
-  movimentoInicial = "reserva",
   contas: contasIniciais = [],
   trigger,
   onSucesso,
@@ -40,7 +37,6 @@ export function CofreRegistarModal({
   const supabase = createClient();
 
   const [aberto, setAberto] = useState(false);
-  const [movimento, setMovimento] = useState<Movimento>(movimentoInicial);
   const [tipo, setTipo] = useState<TipoCofre>(tipoInicial ?? "iva");
   const [valor, setValor] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -60,7 +56,7 @@ export function CofreRegistarModal({
     setSucesso(false); setErro(null); setValor(""); setDescricao("");
     setData(new Date().toISOString().slice(0, 10)); setContaId(null);
     setCriandoConta(false); setNovaNome(""); setNovaBanco("");
-    setMovimento(movimentoInicial); setTipo(tipoInicial ?? "iva");
+    setTipo(tipoInicial ?? "iva");
     setAberto(true);
   }
 
@@ -89,7 +85,7 @@ export function CofreRegistarModal({
     if (!v || v <= 0) { setErro("Insere um valor valido."); return; }
     setLoading(true); setErro(null);
     const { error } = await supabase.from("cofre_registos").insert({
-      user_id: userId, tipo, movimento, valor: v,
+      user_id: userId, tipo, movimento: "reserva", valor: v,
       descricao: descricao.trim() || null, data, conta_id: contaId,
     });
     setLoading(false);
@@ -102,8 +98,6 @@ export function CofreRegistarModal({
 
   const tipoAtual = TIPOS.find((t) => t.value === tipo)!;
   const contaSelecionada = contas.find((c) => c.id === contaId);
-  const isPagamento = movimento === "pagamento";
-  const corBotao = isPagamento ? "#BF4700" : "#1F4E79";
 
   return (
     <>
@@ -112,11 +106,10 @@ export function CofreRegistarModal({
       ) : (
         <Button
           onClick={abrir}
-          className="flex items-center gap-2 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors"
-          style={{ background: corBotao }}
+          className="flex items-center gap-2 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors bg-[#1F4E79] hover:bg-[#163a5c]"
         >
           <PlusCircle className="w-4 h-4" />
-          Registar entrada no cofre
+          Guardar no cofre
         </Button>
       )}
 
@@ -127,24 +120,18 @@ export function CofreRegistarModal({
             className="relative z-10 w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Header */}
             <div
               className="flex items-center justify-between px-6 py-5 border-b border-gray-100"
-              style={{ borderTop: `4px solid ${isPagamento ? "#BF4700" : tipoAtual.cor}` }}
+              style={{ borderTop: `4px solid ${tipoAtual.cor}` }}
             >
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: isPagamento ? "#FFF3EE" : "#EFF4FB" }}>
-                  {isPagamento
-                    ? <ArrowUpCircle className="w-5 h-5" style={{ color: "#BF4700" }} />
-                    : <PiggyBank className="w-5 h-5" style={{ color: "#1F4E79" }} />
-                  }
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#EFF4FB]">
+                  <PiggyBank className="w-5 h-5 text-[#1F4E79]" />
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 text-sm">
-                    {isPagamento ? "Registar pagamento ao fisco" : "Registar entrada no cofre"}
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    {isPagamento ? "Valor que pagaste a AT / SS" : "Guarda o valor que separaste"}
-                  </p>
+                  <p className="font-bold text-gray-900 text-sm">Guardar no cofre</p>
+                  <p className="text-xs text-gray-400">Regista o valor que separaste para impostos</p>
                 </div>
               </div>
               <button onClick={fechar} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
@@ -157,46 +144,11 @@ export function CofreRegistarModal({
                 <div className="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center">
                   <CheckCircle2 className="w-7 h-7 text-green-600" />
                 </div>
-                <p className="font-bold text-gray-900">
-                  {isPagamento ? "Pagamento registado!" : "Entrada registada!"}
-                </p>
+                <p className="font-bold text-gray-900">Guardado no cofre!</p>
                 <p className="text-sm text-gray-400">O teu cofre foi atualizado.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
-                {/* Toggle reserva / pagamento */}
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-700">Tipo de registo</Label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button" onClick={() => setMovimento("reserva")}
-                      className={cn(
-                        "flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 text-sm font-bold transition-all",
-                        movimento === "reserva"
-                          ? "border-[#1F4E79] bg-[#1F4E79] text-white"
-                          : "border-gray-100 text-gray-500 bg-gray-50 hover:border-gray-200"
-                      )}
-                    >
-                      <ArrowDownCircle className="w-4 h-4" /> Reserva
-                    </button>
-                    <button
-                      type="button" onClick={() => setMovimento("pagamento")}
-                      className={cn(
-                        "flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 text-sm font-bold transition-all",
-                        movimento === "pagamento"
-                          ? "border-[#BF4700] bg-[#BF4700] text-white"
-                          : "border-gray-100 text-gray-500 bg-gray-50 hover:border-gray-200"
-                      )}
-                    >
-                      <ArrowUpCircle className="w-4 h-4" /> Pagamento
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-400">
-                    {movimento === "reserva"
-                      ? "Dinheiro que separaste para impostos"
-                      : "Valor que pagaste a AT ou Segurança Social"}
-                  </p>
-                </div>
 
                 {/* Tipo de imposto */}
                 <div className="space-y-2">
@@ -224,10 +176,7 @@ export function CofreRegistarModal({
 
                 {/* Valor */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="valor" className="text-sm font-semibold text-gray-700">
-                    Valor (&euro;)
-                    {isPagamento && <span className="ml-2 font-normal text-gray-400 text-xs">pode ser parcial</span>}
-                  </Label>
+                  <Label htmlFor="valor" className="text-sm font-semibold text-gray-700">Valor (&euro;)</Label>
                   <div className="relative">
                     <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">&euro;</span>
                     <Input
@@ -306,7 +255,7 @@ export function CofreRegistarModal({
                   </Label>
                   <Input
                     id="descricao" type="text"
-                    placeholder={isPagamento ? "Ex: IVA Q2 2026 pago via MB" : "Ex: Transferencia para conta poupanca"}
+                    placeholder="Ex: Transferencia para conta poupanca"
                     value={descricao} onChange={(e) => setDescricao(e.target.value)} className="h-11" maxLength={120}
                   />
                 </div>
@@ -315,12 +264,10 @@ export function CofreRegistarModal({
 
                 <div className="flex gap-3 pt-1">
                   <Button type="button" variant="outline" className="flex-1 h-11" onClick={fechar} disabled={loading}>Cancelar</Button>
-                  <Button type="submit" className="flex-1 h-11 font-bold text-white" style={{ background: corBotao }} disabled={loading || !valor}>
+                  <Button type="submit" className="flex-1 h-11 font-bold text-white bg-[#1F4E79] hover:bg-[#163a5c]" disabled={loading || !valor}>
                     {loading
                       ? <Loader2 className="w-4 h-4 animate-spin" />
-                      : isPagamento
-                        ? <><ArrowUpCircle className="w-4 h-4 mr-2" />Registar pagamento</>
-                        : <><PiggyBank className="w-4 h-4 mr-2" />Guardar no cofre</>
+                      : <><PiggyBank className="w-4 h-4 mr-2" />Guardar no cofre</>
                     }
                   </Button>
                 </div>
