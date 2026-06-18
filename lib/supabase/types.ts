@@ -165,6 +165,7 @@ export type Database = {
           id: string;
           user_id: string;
           tipo: string;
+          movimento: "reserva" | "pagamento";
           valor: number;
           descricao: string | null;
           data: string;
@@ -175,6 +176,7 @@ export type Database = {
           id?: string;
           user_id: string;
           tipo: string;
+          movimento?: "reserva" | "pagamento";
           valor: number;
           descricao?: string | null;
           data?: string;
@@ -185,6 +187,7 @@ export type Database = {
           id?: string;
           user_id?: string;
           tipo?: string;
+          movimento?: "reserva" | "pagamento";
           valor?: number;
           descricao?: string | null;
           data?: string;

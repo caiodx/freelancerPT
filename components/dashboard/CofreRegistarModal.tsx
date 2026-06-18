@@ -7,28 +7,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { ContaCofre } from "@/lib/supabase/types";
-import { PlusCircle, X, Loader2, CheckCircle2, PiggyBank, Wallet, Plus, ChevronDown } from "lucide-react";
+import { PlusCircle, X, Loader2, CheckCircle2, PiggyBank, Wallet, Plus, ChevronDown, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type TipoCofre = "iva" | "irs" | "ss";
+type Movimento = "reserva" | "pagamento";
 
-const TIPOS: { value: TipoCofre; label: string; cor: string; bg: string; desc: string }[] = [
-  { value: "iva", label: "IVA",  cor: "#1F4E79", bg: "bg-[#1F4E79]", desc: "IVA cobrado nas faturas" },
-  { value: "irs", label: "IRS",  cor: "#1E7145", bg: "bg-[#1E7145]", desc: "Reserva para o Modelo 3" },
-  { value: "ss",  label: "SS",   cor: "#7C3AED", bg: "bg-[#7C3AED]", desc: "Segurança Social mensal" },
+const TIPOS: { value: TipoCofre; label: string; cor: string; desc: string }[] = [
+  { value: "iva", label: "IVA",  cor: "#1F4E79", desc: "IVA cobrado nas faturas" },
+  { value: "irs", label: "IRS",  cor: "#1E7145", desc: "Reserva para o Modelo 3" },
+  { value: "ss",  label: "SS",   cor: "#7C3AED", desc: "Segurança Social mensal" },
 ];
 
 interface CofreRegistarModalProps {
   userId: string;
   tipoInicial?: TipoCofre;
+  movimentoInicial?: Movimento;
   contas?: ContaCofre[];
+  trigger?: React.ReactNode;
+  onSucesso?: () => void;
 }
 
-export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais = [] }: CofreRegistarModalProps) {
+export function CofreRegistarModal({
+  userId,
+  tipoInicial,
+  movimentoInicial = "reserva",
+  contas: contasIniciais = [],
+  trigger,
+  onSucesso,
+}: CofreRegistarModalProps) {
   const router = useRouter();
   const supabase = createClient();
 
   const [aberto, setAberto] = useState(false);
+  const [movimento, setMovimento] = useState<Movimento>(movimentoInicial);
   const [tipo, setTipo] = useState<TipoCofre>(tipoInicial ?? "iva");
   const [valor, setValor] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -37,8 +49,6 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
   const [loading, setLoading] = useState(false);
   const [sucesso, setSucesso] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-
-  // Contas — lista local actualizável com criação inline
   const [contas, setContas] = useState<ContaCofre[]>(contasIniciais);
   const [criandoConta, setCriandoConta] = useState(false);
   const [novaNome, setNovaNome] = useState("");
@@ -47,32 +57,22 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
   const [erroConta, setErroConta] = useState<string | null>(null);
 
   function abrir() {
-    setSucesso(false);
-    setErro(null);
-    setValor("");
-    setDescricao("");
-    setData(new Date().toISOString().slice(0, 10));
-    setContaId(null);
-    setCriandoConta(false);
-    setNovaNome("");
-    setNovaBanco("");
+    setSucesso(false); setErro(null); setValor(""); setDescricao("");
+    setData(new Date().toISOString().slice(0, 10)); setContaId(null);
+    setCriandoConta(false); setNovaNome(""); setNovaBanco("");
+    setMovimento(movimentoInicial); setTipo(tipoInicial ?? "iva");
     setAberto(true);
   }
 
-  function fechar() {
-    if (loading) return;
-    setAberto(false);
-  }
+  function fechar() { if (loading) return; setAberto(false); }
 
   async function handleCriarConta() {
-    if (!novaNome.trim()) { setErroConta("Nome obrigatório."); return; }
-    setLoadingConta(true);
-    setErroConta(null);
+    if (!novaNome.trim()) { setErroConta("Nome obrigatorio."); return; }
+    setLoadingConta(true); setErroConta(null);
     const { data: nova, error } = await supabase
       .from("contas_cofre")
       .insert({ user_id: userId, nome: novaNome.trim(), banco: novaBanco.trim() || null })
-      .select()
-      .single();
+      .select().single();
     setLoadingConta(false);
     if (error) { setErroConta("Erro ao criar conta."); return; }
     if (nova) {
@@ -80,49 +80,45 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
       setContas((prev) => [...prev, c]);
       setContaId(c.id);
     }
-    setCriandoConta(false);
-    setNovaNome("");
-    setNovaBanco("");
+    setCriandoConta(false); setNovaNome(""); setNovaBanco("");
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const v = parseFloat(valor);
-    if (!v || v <= 0) { setErro("Insere um valor válido."); return; }
-    setLoading(true);
-    setErro(null);
-
+    if (!v || v <= 0) { setErro("Insere um valor valido."); return; }
+    setLoading(true); setErro(null);
     const { error } = await supabase.from("cofre_registos").insert({
-      user_id: userId,
-      tipo,
-      valor: v,
-      descricao: descricao.trim() || null,
-      data,
-      conta_id: contaId,
+      user_id: userId, tipo, movimento, valor: v,
+      descricao: descricao.trim() || null, data, conta_id: contaId,
     });
-
     setLoading(false);
-    if (error) {
-      setErro("Erro ao guardar. Tenta novamente.");
-    } else {
-      setSucesso(true);
-      router.refresh();
+    if (error) { setErro("Erro ao guardar. Tenta novamente."); }
+    else {
+      setSucesso(true); router.refresh(); onSucesso?.();
       setTimeout(() => { setAberto(false); setSucesso(false); }, 1500);
     }
   }
 
   const tipoAtual = TIPOS.find((t) => t.value === tipo)!;
   const contaSelecionada = contas.find((c) => c.id === contaId);
+  const isPagamento = movimento === "pagamento";
+  const corBotao = isPagamento ? "#BF4700" : "#1F4E79";
 
   return (
     <>
-      <Button
-        onClick={abrir}
-        className="flex items-center gap-2 bg-[#1F4E79] hover:bg-[#163a5c] text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors"
-      >
-        <PlusCircle className="w-4 h-4" />
-        Registar entrada no cofre
-      </Button>
+      {trigger ? (
+        <div onClick={abrir} className="cursor-pointer">{trigger}</div>
+      ) : (
+        <Button
+          onClick={abrir}
+          className="flex items-center gap-2 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors"
+          style={{ background: corBotao }}
+        >
+          <PlusCircle className="w-4 h-4" />
+          Registar entrada no cofre
+        </Button>
+      )}
 
       {aberto && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={fechar}>
@@ -131,15 +127,24 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
             className="relative z-10 w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+            <div
+              className="flex items-center justify-between px-6 py-5 border-b border-gray-100"
+              style={{ borderTop: `4px solid ${isPagamento ? "#BF4700" : tipoAtual.cor}` }}
+            >
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-[#1F4E79]/10 rounded-xl flex items-center justify-center">
-                  <PiggyBank className="w-5 h-5 text-[#1F4E79]" />
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: isPagamento ? "#FFF3EE" : "#EFF4FB" }}>
+                  {isPagamento
+                    ? <ArrowUpCircle className="w-5 h-5" style={{ color: "#BF4700" }} />
+                    : <PiggyBank className="w-5 h-5" style={{ color: "#1F4E79" }} />
+                  }
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 text-sm">Registar entrada no cofre</p>
-                  <p className="text-xs text-gray-400">Guarda o valor que separaste</p>
+                  <p className="font-bold text-gray-900 text-sm">
+                    {isPagamento ? "Registar pagamento ao fisco" : "Registar entrada no cofre"}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {isPagamento ? "Valor que pagaste a AT / SS" : "Guarda o valor que separaste"}
+                  </p>
                 </div>
               </div>
               <button onClick={fechar} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
@@ -152,20 +157,54 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
                 <div className="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center">
                   <CheckCircle2 className="w-7 h-7 text-green-600" />
                 </div>
-                <p className="font-bold text-gray-900">Entrada registada!</p>
+                <p className="font-bold text-gray-900">
+                  {isPagamento ? "Pagamento registado!" : "Entrada registada!"}
+                </p>
                 <p className="text-sm text-gray-400">O teu cofre foi atualizado.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
-                {/* Tipo */}
+                {/* Toggle reserva / pagamento */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold text-gray-700">Tipo de registo</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button" onClick={() => setMovimento("reserva")}
+                      className={cn(
+                        "flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 text-sm font-bold transition-all",
+                        movimento === "reserva"
+                          ? "border-[#1F4E79] bg-[#1F4E79] text-white"
+                          : "border-gray-100 text-gray-500 bg-gray-50 hover:border-gray-200"
+                      )}
+                    >
+                      <ArrowDownCircle className="w-4 h-4" /> Reserva
+                    </button>
+                    <button
+                      type="button" onClick={() => setMovimento("pagamento")}
+                      className={cn(
+                        "flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 text-sm font-bold transition-all",
+                        movimento === "pagamento"
+                          ? "border-[#BF4700] bg-[#BF4700] text-white"
+                          : "border-gray-100 text-gray-500 bg-gray-50 hover:border-gray-200"
+                      )}
+                    >
+                      <ArrowUpCircle className="w-4 h-4" /> Pagamento
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    {movimento === "reserva"
+                      ? "Dinheiro que separaste para impostos"
+                      : "Valor que pagaste a AT ou Segurança Social"}
+                  </p>
+                </div>
+
+                {/* Tipo de imposto */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-gray-700">Imposto</Label>
                   <div className="grid grid-cols-3 gap-2">
                     {TIPOS.map((t) => (
                       <button
-                        key={t.value}
-                        type="button"
-                        onClick={() => setTipo(t.value)}
+                        key={t.value} type="button" onClick={() => setTipo(t.value)}
                         className={cn(
                           "flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 text-sm font-bold transition-all",
                           tipo === t.value
@@ -185,20 +224,16 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
 
                 {/* Valor */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="valor" className="text-sm font-semibold text-gray-700">Valor (&#8364;)</Label>
+                  <Label htmlFor="valor" className="text-sm font-semibold text-gray-700">
+                    Valor (&euro;)
+                    {isPagamento && <span className="ml-2 font-normal text-gray-400 text-xs">pode ser parcial</span>}
+                  </Label>
                   <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">&#8364;</span>
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">&euro;</span>
                     <Input
-                      id="valor"
-                      type="number"
-                      min="0.01"
-                      step="0.01"
-                      placeholder="0,00"
-                      value={valor}
-                      onChange={(e) => setValor(e.target.value)}
-                      className="pl-8 h-11 text-base font-bold"
-                      required
-                      autoFocus
+                      id="valor" type="number" min="0.01" step="0.01" placeholder="0,00"
+                      value={valor} onChange={(e) => setValor(e.target.value)}
+                      className="pl-8 h-11 text-base font-bold" required autoFocus
                     />
                   </div>
                 </div>
@@ -208,10 +243,8 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
                   <Label className="text-sm font-semibold text-gray-700">
                     Conta <span className="text-gray-400 font-normal">(opcional)</span>
                   </Label>
-
                   {!criandoConta ? (
                     <div className="flex gap-2">
-                      {/* Selector */}
                       <div className="relative flex-1">
                         <select
                           value={contaId ?? ""}
@@ -220,26 +253,20 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
                         >
                           <option value="">Sem conta</option>
                           {contas.map((c) => (
-                            <option key={c.id} value={c.id}>
-                              {c.nome}{c.banco ? ` — ${c.banco}` : ""}
-                            </option>
+                            <option key={c.id} value={c.id}>{c.nome}{c.banco ? ` — ${c.banco}` : ""}</option>
                           ))}
                         </select>
                         <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                       </div>
-                      {/* Botão nova conta */}
                       <button
                         type="button"
                         onClick={() => { setCriandoConta(true); setErroConta(null); }}
                         className="shrink-0 h-11 px-3 rounded-lg border border-gray-200 text-gray-500 hover:border-[#1F4E79] hover:text-[#1F4E79] transition-colors flex items-center gap-1.5 text-sm font-medium"
-                        title="Criar nova conta"
                       >
-                        <Plus className="w-3.5 h-3.5" />
-                        Nova
+                        <Plus className="w-3.5 h-3.5" /> Nova
                       </button>
                     </div>
                   ) : (
-                    /* Mini-form criação inline */
                     <div className="border border-[#1F4E79]/30 rounded-xl p-3.5 space-y-3 bg-blue-50/40">
                       <div className="flex items-center justify-between mb-1">
                         <p className="text-xs font-bold text-[#1F4E79] flex items-center gap-1.5">
@@ -249,31 +276,14 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
                           <X className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                      <Input
-                        placeholder="Nome da conta *"
-                        value={novaNome}
-                        onChange={(e) => setNovaNome(e.target.value)}
-                        className="h-9 text-sm bg-white"
-                        autoFocus
-                      />
-                      <Input
-                        placeholder="Banco (opcional)"
-                        value={novaBanco}
-                        onChange={(e) => setNovaBanco(e.target.value)}
-                        className="h-9 text-sm bg-white"
-                      />
+                      <Input placeholder="Nome da conta *" value={novaNome} onChange={(e) => setNovaNome(e.target.value)} className="h-9 text-sm bg-white" autoFocus />
+                      <Input placeholder="Banco (opcional)" value={novaBanco} onChange={(e) => setNovaBanco(e.target.value)} className="h-9 text-sm bg-white" />
                       {erroConta && <p className="text-xs text-red-600">{erroConta}</p>}
-                      <Button
-                        type="button"
-                        onClick={handleCriarConta}
-                        disabled={loadingConta || !novaNome.trim()}
-                        className="w-full h-9 bg-[#1F4E79] hover:bg-[#163a5f] text-sm font-bold"
-                      >
+                      <Button type="button" onClick={handleCriarConta} disabled={loadingConta || !novaNome.trim()} className="w-full h-9 bg-[#1F4E79] hover:bg-[#163a5f] text-sm font-bold">
                         {loadingConta ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Criar e seleccionar"}
                       </Button>
                     </div>
                   )}
-
                   {contaSelecionada && !criandoConta && (
                     <p className="text-xs text-[#1F4E79] flex items-center gap-1">
                       <Wallet className="w-3 h-3" />
@@ -286,51 +296,31 @@ export function CofreRegistarModal({ userId, tipoInicial, contas: contasIniciais
                 {/* Data */}
                 <div className="space-y-1.5">
                   <Label htmlFor="data" className="text-sm font-semibold text-gray-700">Data</Label>
-                  <Input
-                    id="data"
-                    type="date"
-                    value={data}
-                    onChange={(e) => setData(e.target.value)}
-                    className="h-11"
-                    required
-                  />
+                  <Input id="data" type="date" value={data} onChange={(e) => setData(e.target.value)} className="h-11" required />
                 </div>
 
-                {/* Descrição */}
+                {/* Nota */}
                 <div className="space-y-1.5">
                   <Label htmlFor="descricao" className="text-sm font-semibold text-gray-700">
                     Nota <span className="text-gray-400 font-normal">(opcional)</span>
                   </Label>
                   <Input
-                    id="descricao"
-                    type="text"
-                    placeholder="Ex: Transfer&#234;ncia para conta poupan&#231;a"
-                    value={descricao}
-                    onChange={(e) => setDescricao(e.target.value)}
-                    className="h-11"
-                    maxLength={120}
+                    id="descricao" type="text"
+                    placeholder={isPagamento ? "Ex: IVA Q2 2026 pago via MB" : "Ex: Transferencia para conta poupanca"}
+                    value={descricao} onChange={(e) => setDescricao(e.target.value)} className="h-11" maxLength={120}
                   />
                 </div>
 
-                {erro && (
-                  <div className="bg-red-50 border border-red-100 rounded-lg px-3 py-2.5 text-sm text-red-700">
-                    {erro}
-                  </div>
-                )}
+                {erro && <div className="bg-red-50 border border-red-100 rounded-lg px-3 py-2.5 text-sm text-red-700">{erro}</div>}
 
                 <div className="flex gap-3 pt-1">
-                  <Button type="button" variant="outline" className="flex-1 h-11" onClick={fechar} disabled={loading}>
-                    Cancelar
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex-1 h-11 font-bold"
-                    style={{ background: tipoAtual.cor }}
-                    disabled={loading || !valor}
-                  >
+                  <Button type="button" variant="outline" className="flex-1 h-11" onClick={fechar} disabled={loading}>Cancelar</Button>
+                  <Button type="submit" className="flex-1 h-11 font-bold text-white" style={{ background: corBotao }} disabled={loading || !valor}>
                     {loading
                       ? <Loader2 className="w-4 h-4 animate-spin" />
-                      : <><PiggyBank className="w-4 h-4 mr-2" />Guardar no cofre</>
+                      : isPagamento
+                        ? <><ArrowUpCircle className="w-4 h-4 mr-2" />Registar pagamento</>
+                        : <><PiggyBank className="w-4 h-4 mr-2" />Guardar no cofre</>
                     }
                   </Button>
                 </div>

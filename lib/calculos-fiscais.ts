@@ -1,35 +1,33 @@
 // ============================================================
-// CÁLCULOS FISCAIS — FreelancerPT.app
+// CALCULOS FISCAIS — FreelancerPT.app
 // Regras verificadas para 2026 | Regime Simplificado
 // ============================================================
 
 export interface ConfiguracaoFiscal {
   regime: "simplificado" | "organizada";
-  ivaIsento: boolean;       // Art. 53.º (≤€15k/ano) ou Art. 9.º
-  temRetencao: boolean;     // cliente tem contabilidade organizada E faturação > €15k/ano
-  isencaoPrimeiroAnoSS: boolean; // isenção automática nos primeiros 12 meses
+  ivaIsento: boolean;
+  temRetencao: boolean;
+  isencaoPrimeiroAnoSS: boolean;
 }
 
 export interface ResultadoCalculo {
   valorBase: number;
   valorIVA: number;
   totalFatura: number;
-  // O que guardar
   ivaGuardar: number;
   irsGuardar: number;
   ssGuardar: number;
   totalGuardar: number;
   percentagemGuardar: number;
-  // O que fica
   liquidoReal: number;
 }
 
 // ---- Constantes fiscais 2026 ----
 const TAXA_IVA = 0.23;
-const COEFICIENTE_SIMPLIFICADO = 0.75; // 75% da base é tributável
-const TAXA_IRS_ESTIMADA = 0.22;        // estimativa conservadora para ~€33.600/ano
-const TAXA_SS = 0.214;                 // 21.4%
-const BASE_SS = 0.70;                  // incide sobre 70% dos rendimentos
+const COEFICIENTE_SIMPLIFICADO = 0.75;
+const TAXA_IRS_ESTIMADA = 0.22;
+const TAXA_SS = 0.214;
+const BASE_SS = 0.70;
 
 export function calcularFatura(
   valorBase: number,
@@ -48,17 +46,12 @@ export function calcularFatura(
     : arredondar(valorBase * TAXA_IVA);
 
   const totalFatura = valorBase + valorIVA;
-
-  // IVA: 100% é do Estado — guardar tudo
   const ivaGuardar = valorIVA;
 
-  // IRS: só guardar se NÃO há retenção na fonte
-  // (se há retenção, o cliente já descontou — não guardar de novo)
   const irsGuardar = config.temRetencao
     ? 0
     : arredondar(valorBase * TAXA_IRS_ESTIMADA);
 
-  // SS: 21.4% sobre 70% da base — dispensado no 1.º ano
   const ssGuardar = config.isencaoPrimeiroAnoSS
     ? 0
     : arredondar(valorBase * BASE_SS * TAXA_SS);
@@ -70,15 +63,9 @@ export function calcularFatura(
     : 0;
 
   return {
-    valorBase,
-    valorIVA,
-    totalFatura,
-    ivaGuardar,
-    irsGuardar,
-    ssGuardar,
-    totalGuardar,
-    percentagemGuardar,
-    liquidoReal,
+    valorBase, valorIVA, totalFatura,
+    ivaGuardar, irsGuardar, ssGuardar,
+    totalGuardar, percentagemGuardar, liquidoReal,
   };
 }
 
@@ -94,7 +81,7 @@ export function formatEuro(value: number): string {
   }).format(value);
 }
 
-// ---- Calendário fiscal 2026 ----
+// ---- Calendario fiscal 2026 ----
 export interface PrazoFiscal {
   label: string;
   data: Date;
@@ -103,37 +90,61 @@ export interface PrazoFiscal {
 }
 
 export function getPrazosFiscais2026(): PrazoFiscal[] {
+  // SS mensal: pagamento entre dia 10-20 de cada mes
+  const mesesSS = [
+    { mes: "Jan", data: "2026-01-20" },
+    { mes: "Fev", data: "2026-02-20" },
+    { mes: "Mar", data: "2026-03-20" },
+    { mes: "Abr", data: "2026-04-20" },
+    { mes: "Mai", data: "2026-05-20" },
+    { mes: "Jun", data: "2026-06-20" },
+    { mes: "Jul", data: "2026-07-20" },
+    { mes: "Ago", data: "2026-08-20" },
+    { mes: "Set", data: "2026-09-20" },
+    { mes: "Out", data: "2026-10-20" },
+    { mes: "Nov", data: "2026-11-20" },
+    { mes: "Dez", data: "2026-12-20" },
+  ];
+
+  const prazosSS: PrazoFiscal[] = mesesSS.map(({ mes, data }) => ({
+    label: `SS ${mes} 2026`,
+    data: new Date(data),
+    tipo: "ss" as const,
+    descricao: `Seguranca Social referente a ${mes} 2026. Pagar entre dia 10-20.`,
+  }));
+
   return [
     {
       label: "IVA Q1 2026",
       data: new Date("2026-05-20"),
       tipo: "iva",
-      descricao: "Declaração periódica Jan-Mar 2026. Pagamento até 25 Mai.",
+      descricao: "Declaracao periodica Jan-Mar 2026. Pagamento ate 25 Mai.",
     },
     {
       label: "IVA Q2 2026",
       data: new Date("2026-08-20"),
       tipo: "iva",
-      descricao: "Declaração periódica Abr-Jun 2026. Pagamento até 25 Ago.",
+      descricao: "Declaracao periodica Abr-Jun 2026. Pagamento ate 25 Ago.",
     },
     {
       label: "IVA Q3 2026",
       data: new Date("2026-11-20"),
       tipo: "iva",
-      descricao: "Declaração periódica Jul-Set 2026. Pagamento até 25 Nov.",
+      descricao: "Declaracao periodica Jul-Set 2026. Pagamento ate 25 Nov.",
     },
     {
       label: "IVA Q4 2026",
       data: new Date("2027-02-20"),
       tipo: "iva",
-      descricao: "Declaração periódica Out-Dez 2026. Pagamento até 25 Fev.",
+      descricao: "Declaracao periodica Out-Dez 2026. Pagamento ate 25 Fev.",
     },
     {
       label: "IRS — Modelo 3",
       data: new Date("2027-06-30"),
       tipo: "irs",
-      descricao: "Declaração anual dos rendimentos de 2026. Anexo B obrigatório.",
+      descricao: "Declaracao anual dos rendimentos de 2026. Anexo B obrigatorio. Pode pagar em ate 36 prestacoes mensais se nao tiver o valor todo.",
     },
+    ...prazosSS,
   ];
 }
 
