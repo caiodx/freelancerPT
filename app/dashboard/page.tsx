@@ -133,7 +133,16 @@ export default async function DashboardPage() {
         <div className="xl:col-span-2">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-bold text-gray-900 text-sm">O teu cofre fiscal</h2>
-            <CofreRegistarModal userId={user.id} contas={contas} />
+            <CofreRegistarModal
+              userId={user.id}
+              contas={contas}
+              trigger={
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-[#1F4E79] text-white hover:bg-[#163a5c] transition-colors cursor-pointer">
+                  <Plus className="w-3.5 h-3.5" />
+                  Guardar no cofre
+                </span>
+              }
+            />
           </div>
           <CofreFiscal
             readOnly
