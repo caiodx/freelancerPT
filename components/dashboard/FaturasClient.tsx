@@ -166,8 +166,13 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
     router.refresh();
   }
 
-  const totalFaturado = faturas.reduce((s, f) => s + f.valor_total, 0);
-  const totalReservar = faturas.reduce((s, f) => s + f.iva_a_guardar + f.irs_a_guardar + f.ss_a_guardar, 0);
+  const [mesFiltro, setMesFiltro] = useState<string | null>(null);
+
+  const mesesDisponiveis = [...new Set(faturas.map((f) => f.data_fatura.slice(0, 7)))].sort().reverse();
+  const faturasFiltradas = mesFiltro ? faturas.filter((f) => f.data_fatura.startsWith(mesFiltro)) : faturas;
+
+  const totalFaturado = faturasFiltradas.reduce((s, f) => s + f.valor_total, 0);
+  const totalReservar = faturasFiltradas.reduce((s, f) => s + f.iva_a_guardar + f.irs_a_guardar + f.ss_a_guardar, 0);
 
   return (
     <>
@@ -191,16 +196,41 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
       </div>
 
       {faturas.length > 0 && (
-        <div className="grid sm:grid-cols-2 gap-4 mb-6">
-          <div className="bg-white rounded-xl border border-gray-100 px-5 py-4">
-            <p className="text-xs text-gray-400 font-medium mb-1">Total faturado</p>
-            <p className="text-2xl font-extrabold text-gray-900">&#8364;{totalFaturado.toFixed(2)}</p>
+        <>
+          {/* Filtro por mes */}
+          {mesesDisponiveis.length > 1 && (
+            <div className="flex gap-2 mb-4 flex-wrap">
+              <button
+                onClick={() => setMesFiltro(null)}
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${!mesFiltro ? "bg-[#1F4E79] text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}
+              >
+                Todos
+              </button>
+              {mesesDisponiveis.map((mes) => {
+                const label = new Date(mes + "-15").toLocaleDateString("pt-PT", { month: "short", year: "2-digit" });
+                return (
+                  <button
+                    key={mes}
+                    onClick={() => setMesFiltro(mes)}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors capitalize ${mesFiltro === mes ? "bg-[#1F4E79] text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            <div className="bg-white rounded-xl border border-gray-100 px-5 py-4">
+              <p className="text-xs text-gray-400 font-medium mb-1">Total faturado</p>
+              <p className="text-2xl font-extrabold text-gray-900">&#8364;{totalFaturado.toFixed(2)}</p>
+            </div>
+            <div className="bg-blue-50 rounded-xl border border-blue-100 px-5 py-4">
+              <p className="text-xs text-[#1F4E79] font-medium mb-1">Total a reservar (impostos)</p>
+              <p className="text-2xl font-extrabold text-[#1F4E79]">&#8364;{totalReservar.toFixed(2)}</p>
+            </div>
           </div>
-          <div className="bg-red-50 rounded-xl border border-red-100 px-5 py-4">
-            <p className="text-xs text-red-400 font-medium mb-1">Total a reservar (impostos)</p>
-            <p className="text-2xl font-extrabold text-red-600">&#8364;{totalReservar.toFixed(2)}</p>
-          </div>
-        </div>
+        </>
       )}
 
       {faturas.length === 0 ? (
@@ -227,7 +257,10 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
             <p className="col-span-2 text-xs font-semibold text-gray-400 uppercase tracking-wider text-right">Reservar</p>
           </div>
           <div className="divide-y divide-gray-50">
-            {faturas.map((f) => {
+            {faturasFiltradas.length === 0 && (
+              <p className="text-center text-sm text-gray-400 py-8">Nenhuma fatura neste mes.</p>
+            )}
+            {faturasFiltradas.map((f) => {
               const reservar = f.iva_a_guardar + f.irs_a_guardar + f.ss_a_guardar;
               return (
                 <div key={f.id} className="group">
@@ -239,7 +272,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                     <div className="text-right shrink-0 flex items-center gap-1">
                       <div>
                         <p className="font-bold text-gray-900 text-sm">&#8364;{f.valor_total.toFixed(2)}</p>
-                        <p className="text-xs font-semibold text-red-500">reservar &#8364;{reservar.toFixed(0)}</p>
+                        <p className="text-xs font-semibold text-[#1F4E79]">reservar &#8364;{reservar.toFixed(0)}</p>
                       </div>
                       <button onClick={() => abrirEditar(f)} className="p-1.5 text-gray-300 hover:text-[#1F4E79] transition-colors"><Pencil className="w-4 h-4" /></button>
                       <button onClick={() => handleApagar(f.id)} className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
@@ -251,7 +284,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                     <p className="col-span-2 text-sm text-gray-600 text-right">&#8364;{f.valor_base.toFixed(2)}</p>
                     <p className="col-span-2 text-sm font-semibold text-gray-900 text-right">&#8364;{f.valor_total.toFixed(2)}</p>
                     <div className="col-span-2 flex items-center justify-end gap-1">
-                      <p className="text-sm font-bold text-red-500">&#8364;{reservar.toFixed(2)}</p>
+                      <p className="text-sm font-bold text-[#1F4E79]">&#8364;{reservar.toFixed(2)}</p>
                       <button onClick={() => abrirEditar(f)} className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:text-[#1F4E79] text-gray-300"><Pencil className="w-3.5 h-3.5" /></button>
                       <button onClick={() => handleApagar(f.id)} className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:text-red-500 text-gray-300"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
@@ -334,6 +367,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                   <AlertCircle className="w-4 h-4 shrink-0" />{erroEdit}
                 </div>
               )}
+              <p className="text-[11px] text-gray-400">* campos obrigatorios</p>
               <div className="flex gap-3 pt-1">
                 <Button type="button" variant="outline" className="flex-1 h-11" onClick={() => setFaturaEditando(null)} disabled={loadingEdit}>Cancelar</Button>
                 <Button type="submit" className="flex-1 h-11 bg-[#1F4E79] hover:bg-[#163a5c] font-bold" disabled={loadingEdit || !formEdit.valor_base}>
@@ -391,23 +425,24 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                 </button>
               </div>
               <div className="space-y-1.5">
-                <Label>Data da fatura *</Label>
-                <Input type="date" value={form.data_fatura} onChange={(e) => setForm({ ...form, data_fatura: e.target.value })} className="h-11" required />
+                <Label>Nr fatura <span className="text-gray-400 font-normal">(opcional)</span></Label>
+                <Input type="text" placeholder="Ex: FR 2026/001" value={form.numero_fatura} onChange={(e) => setForm({ ...form, numero_fatura: e.target.value })} className="h-11" />
               </div>
               <div className="space-y-1.5">
                 <Label>Cliente <span className="text-gray-400 font-normal">(opcional)</span></Label>
-                <Input type="text" placeholder="Ex: OSKONTECH LDA" value={form.cliente} onChange={(e) => setForm({ ...form, cliente: e.target.value })} className="h-11" />
+                <Input type="text" placeholder="Ex: Empresa Lda" value={form.cliente} onChange={(e) => setForm({ ...form, cliente: e.target.value })} className="h-11" />
               </div>
               <div className="space-y-1.5">
-                <Label>Nr fatura <span className="text-gray-400 font-normal">(opcional)</span></Label>
-                <Input type="text" placeholder="Ex: FR 2026/001" value={form.numero_fatura} onChange={(e) => setForm({ ...form, numero_fatura: e.target.value })} className="h-11" />
+                <Label>Data da fatura *</Label>
+                <Input type="date" value={form.data_fatura} onChange={(e) => setForm({ ...form, data_fatura: e.target.value })} className="h-11" required />
               </div>
               {erro && (
                 <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 rounded-lg px-3 py-2.5">
                   <AlertCircle className="w-4 h-4 shrink-0" />{erro}
                 </div>
               )}
-              <div className="flex gap-3 pt-1">
+              <p className="text-[11px] text-gray-400">* campos obrigatorios</p>
+              <div className="flex gap-3">
                 <Button type="button" variant="outline" className="flex-1 h-11" onClick={() => setModalAberto(false)} disabled={loading}>Cancelar</Button>
                 <Button type="submit" className="flex-1 h-11 bg-[#BF4700] hover:bg-[#a33a00] font-bold" disabled={loading || !form.valor_base}>
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Adicionar fatura"}

@@ -11,8 +11,10 @@ import type { ConfiguracoesFiscais, Fatura, CofreRegisto, Subscricao, ContaCofre
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function saudar(email: string): string {
-  const nome = email.split("@")[0].split(".")[0];
+function saudar(nomeOuEmail: string): string {
+  const nome = nomeOuEmail.includes("@")
+    ? nomeOuEmail.split("@")[0].split(".")[0]
+    : nomeOuEmail.split(" ")[0];
   const hora = new Date().getHours();
   const saudacao = hora < 12 ? "Bom dia" : hora < 18 ? "Boa tarde" : "Boa noite";
   return `${saudacao}, ${nome.charAt(0).toUpperCase() + nome.slice(1)} 👋`;
@@ -33,6 +35,7 @@ export default async function DashboardPage() {
     { data: cofre },
     { data: subscricao },
     { data: contasCofre },
+    { data: perfil },
   ] = await Promise.all([
     supabase
       .from("configuracoes_fiscais")
@@ -59,6 +62,11 @@ export default async function DashboardPage() {
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: true }),
+    supabase
+      .from("users")
+      .select("nome")
+      .eq("id", user.id)
+      .single(),
   ]);
 
   const faturas: Fatura[] = faturasRaw ?? [];
@@ -103,7 +111,7 @@ export default async function DashboardPage() {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight truncate">
-            {saudar(user.email ?? "")}
+            {saudar((perfil as { nome: string | null } | null)?.nome || user.email || "")}
           </h1>
           <p className="text-gray-500 text-sm mt-0.5 capitalize">
             {new Date().toLocaleDateString("pt-PT", { weekday: "long", day: "numeric", month: "long" })}
@@ -122,10 +130,14 @@ export default async function DashboardPage() {
       <div className="grid xl:grid-cols-3 gap-6">
 
         {/* Cofre Fiscal — ocupa 2 colunas */}
-        <div className="xl:col-span-2 space-y-3">
+        <div className="xl:col-span-2">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-bold text-gray-900 text-sm">O teu cofre fiscal</h2>
+            <CofreRegistarModal userId={user.id} contas={contas} />
+          </div>
           <CofreFiscal
             readOnly
-            titulo="O teu cofre fiscal"
+            titulo=""
             faturado={faturasAno.reduce((s, f) => s + f.valor_base, 0)}
             guardado={{
               iva: totalIVAGuardado,
@@ -139,9 +151,6 @@ export default async function DashboardPage() {
               isencaoPrimeiroAnoSS: cfg.primeiro_ano,
             } : undefined}
           />
-          <div className="flex justify-end">
-            <CofreRegistarModal userId={user.id} contas={contas} />
-          </div>
         </div>
 
         {/* Prazos — coluna direita */}
@@ -208,7 +217,7 @@ export default async function DashboardPage() {
             Adiciona a tua primeira fatura para o cofre começar a calcular.
           </p>
           <Link
-            href="/dashboard/faturas/nova"
+            href="/dashboar/faturas/nova"
             className="inline-flex items-center gap-2 bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
           >
             <Plus className="w-4 h-4" />

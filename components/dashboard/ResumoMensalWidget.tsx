@@ -28,29 +28,30 @@ export function ResumoMensalWidget({
     ? Math.min(100, Math.round((totalGuardado / totalNecessario) * 100))
     : 0;
 
-  const mesAtual = new Date().toLocaleDateString("pt-PT", { month: "long", year: "numeric" });
+  const anoAtual = new Date().getFullYear();
+  const mesAtual = new Date().toLocaleDateString("pt-PT", { month: "long" });
 
   const cards = [
     {
-      label: "Faturado este mês",
+      label: `Faturado em ${mesAtual}`,
       value: `€${faturadoMes.toFixed(0)}`,
-      sub: `${totalFaturas} fatura${totalFaturas !== 1 ? "s" : ""}`,
+      sub: `${totalFaturas} fatura${totalFaturas !== 1 ? "s" : ""} registada${totalFaturas !== 1 ? "s" : ""}`,
       icon: Euro,
       color: "text-[#1F4E79]",
       bg: "bg-[#1F4E79]/5",
     },
     {
-      label: "Total guardado (impostos)",
+      label: `Guardado em ${anoAtual}`,
       value: `€${totalGuardado.toFixed(0)}`,
-      sub: `de €${totalNecessario.toFixed(0)} necessário`,
+      sub: `de €${totalNecessario.toFixed(0)} necessario no ano`,
       icon: PiggyBank,
       color: pctTotal >= 80 ? "text-[#1E7145]" : pctTotal >= 45 ? "text-amber-500" : "text-red-500",
       bg: pctTotal >= 80 ? "bg-green-50" : pctTotal >= 45 ? "bg-amber-50" : "bg-red-50",
     },
     {
-      label: "Ainda falta guardar",
-      value: falta > 0 ? `€${falta.toFixed(0)}` : "Coberto ✓",
-      sub: falta > 0 ? "para cobrir todos os impostos" : "Todos os impostos cobertos",
+      label: "Falta guardar",
+      value: falta > 0 ? `€${falta.toFixed(0)}` : "Coberto",
+      sub: falta > 0 ? `para cobrir impostos de ${anoAtual}` : "Todos os impostos cobertos",
       icon: TrendingUp,
       color: falta > 0 ? "text-red-500" : "text-[#1E7145]",
       bg: falta > 0 ? "bg-red-50" : "bg-green-50",
@@ -60,10 +61,7 @@ export function ResumoMensalWidget({
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h2 className="font-bold text-gray-900">
-          Resumo —{" "}
-          <span className="capitalize">{mesAtual}</span>
-        </h2>
+        <h2 className="font-bold text-gray-900">Situacao fiscal {anoAtual}</h2>
         <span className="text-sm text-gray-400">{pctTotal}% coberto</span>
       </div>
 
@@ -86,7 +84,6 @@ export function ResumoMensalWidget({
             </div>
           );
         })}
-      </div>
-    </div>
+      </div>    </div>
   );
 }

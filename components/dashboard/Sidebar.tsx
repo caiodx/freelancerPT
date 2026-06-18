@@ -4,30 +4,22 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
-  LayoutDashboard,
-  FileText,
-  Calendar,
-  Settings,
-  LogOut,
-  Shield,
-  ChevronRight,
-  PiggyBank,
-  Wallet,
+  LayoutDashboard, FileText, Calendar, Settings, LogOut,
+  Shield, ChevronRight, PiggyBank,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/dashboard", label: "Início", icon: LayoutDashboard, exact: true },
-  { href: "/dashboard/faturas", label: "Faturas", icon: FileText },
-  { href: "/dashboard/cofre", label: "Cofre", icon: PiggyBank },
-  { href: "/dashboard/contas", label: "Contas", icon: Wallet },
-  { href: "/dashboard/prazos", label: "Prazos", icon: Calendar },
-  { href: "/dashboard/configuracoes", label: "Config", icon: Settings },
+  { href: "/dashboard",              label: "Inicio",      icon: LayoutDashboard, exact: true },
+  { href: "/dashboard/faturas",      label: "Faturas",     icon: FileText },
+  { href: "/dashboard/cofre",        label: "Cofre",       icon: PiggyBank },
+  { href: "/dashboard/prazos",       label: "Prazos",      icon: Calendar },
+  { href: "/dashboard/configuracoes",label: "Definicoes",  icon: Settings },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
+  const router   = useRouter();
   const supabase = createClient();
 
   async function handleLogout() {
@@ -39,8 +31,8 @@ export function Sidebar() {
     <>
       {/* ── DESKTOP SIDEBAR ─────────────────────────────────────────────── */}
       <aside className="hidden md:flex w-60 shrink-0 bg-[#0F1F33] min-h-screen flex-col">
-        {/* Logo + Logout no topo */}
-        <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
+        {/* Logo */}
+        <div className="px-5 py-4 border-b border-white/5">
           <Link href="/dashboard" className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-[#1F4E79] rounded-lg flex items-center justify-center">
               <Shield className="w-4 h-4 text-white" />
@@ -49,13 +41,6 @@ export function Sidebar() {
               freelancer<span className="text-[#BF4700]">PT</span>
             </span>
           </Link>
-          <button
-            onClick={handleLogout}
-            title="Sair"
-            className="flex items-center justify-center w-8 h-8 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
         </div>
 
         {/* Nav */}
@@ -80,6 +65,17 @@ export function Sidebar() {
             );
           })}
         </nav>
+
+        {/* Logout no fundo */}
+        <div className="px-3 pb-5 border-t border-white/5 pt-3">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/40 hover:text-white hover:bg-white/5 transition-colors"
+          >
+            <LogOut className="w-4 h-4 shrink-0" />
+            Sair
+          </button>
+        </div>
       </aside>
 
       {/* ── MOBILE BOTTOM NAV ───────────────────────────────────────────── */}
@@ -100,13 +96,6 @@ export function Sidebar() {
             </Link>
           );
         })}
-        <button
-          onClick={handleLogout}
-          className="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-semibold text-white/40"
-        >
-          <LogOut className="w-5 h-5" />
-          Sair
-        </button>
       </nav>
     </>
   );

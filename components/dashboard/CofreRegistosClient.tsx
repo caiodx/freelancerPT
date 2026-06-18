@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { CofreRegisto, ContaCofre } from "@/lib/supabase/types";
 import { Trash2, Pencil, X, Loader2, PiggyBank, AlertCircle, Wallet, ArrowDownCircle, ArrowUpCircle, CheckCircle2 } from "lucide-react";
+// Wallet kept for conta display below
 import { CofreRegistarModal } from "@/components/dashboard/CofreRegistarModal";
 
 interface Props {
@@ -103,9 +104,12 @@ export function CofreRegistosClient({ registos: inicial, contas, userId, isentoI
       <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
         <div>
           <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Cofre Fiscal</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{registos.length} registo{registos.length !== 1 ? "s" : ""} · saldo activo</p>
+          <p className="text-sm text-gray-500 mt-0.5">{registos.length} registo{registos.length !== 1 ? "s" : ""} · historico de reservas e pagamentos</p>
         </div>
-        <CofreRegistarModal userId={userId} contas={contas} />
+        <div className="flex items-center gap-3">
+          <a href="/dashboard/contas" className="text-xs text-gray-400 hover:text-[#1F4E79] hover:underline transition-colors">Gerir contas →</a>
+          <CofreRegistarModal userId={userId} contas={contas} />
+        </div>
       </div>
 
       {/* Cards de saldo */}
@@ -126,16 +130,7 @@ export function CofreRegistosClient({ registos: inicial, contas, userId, isentoI
               {limpo ? (
                 <p className="text-[10px] text-green-500 mt-0.5">Limpo ✓</p>
               ) : (
-                <div className="mt-2">
-                  <CofreRegistarModal
-                    userId={userId} tipoInicial={tipo} movimentoInicial="pagamento" contas={contas}
-                    trigger={
-                      <span className="text-[10px] font-semibold text-[#BF4700] hover:underline cursor-pointer flex items-center gap-1">
-                        <ArrowUpCircle className="w-3 h-3" /> Registar pagamento
-                      </span>
-                    }
-                  />
-                </div>
+                <p className="text-[10px] text-gray-400 mt-0.5">Pagar em Prazos →</p>
               )}
             </div>
           );
