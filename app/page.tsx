@@ -222,7 +222,7 @@ export default function Home() {
           <div className="flex flex-col gap-4">
             <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/hero-dashboard.jpg"
+                src="/hero-dashboard.svg"
                 alt="Dashboard FreelancerPT — visao geral das reservas de impostos e faturas recentes"
                 fill
                 className="object-cover"
@@ -610,7 +610,7 @@ export default function Home() {
             {/* Mobile image */}
             <div className="w-full max-w-sm mx-auto">
               <Image
-                src="/mobile-dashboard.jpg"
+                src="/cofre-illustration.svg"
                 alt="FreelancerPT no telemovel — calculadora fiscal com IVA, IRS e Seguranca Social"
                 width={600}
                 height={800}

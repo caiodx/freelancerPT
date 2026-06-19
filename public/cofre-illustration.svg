@@ -1,0 +1,91 @@
+<svg width="800" height="560" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Cofre Fiscal FreelancerPT</title>
+  <desc>Cofre fiscal com reservas de IVA, IRS e Segurança Social organizadas por imposto</desc>
+  <rect width="680" height="420" fill="#F8FAFC"/>
+  <ellipse cx="340" cy="210" rx="280" ry="190" fill="#1F4E79" opacity="0.04"/>
+  <ellipse cx="100" cy="100" rx="80" ry="60" fill="#BF4700" opacity="0.06"/>
+  <ellipse cx="580" cy="330" rx="90" ry="65" fill="#7C3AED" opacity="0.06"/>
+  <rect x="210" y="60" width="260" height="320" rx="18" fill="white" stroke="#E2E8F0" stroke-width="1.5"/>
+  <rect x="210" y="60" width="260" height="58" rx="18" fill="#0F1F33"/>
+  <rect x="210" y="98" width="260" height="20" fill="#0F1F33"/>
+  <rect x="228" y="76" width="28" height="28" rx="8" fill="#1F4E79"/>
+  <text x="242" y="94" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">F</text>
+  <rect x="264" y="82" width="80" height="8" rx="3" fill="white" opacity="0.8"/>
+  <rect x="264" y="94" width="55" height="5" rx="2" fill="white" opacity="0.35"/>
+  <rect x="228" y="134" width="100" height="7" rx="3" fill="#0F1F33" opacity="0.5"/>
+  <rect x="228" y="148" width="160" height="20" rx="5" fill="#F8FAFC"/>
+  <rect x="236" y="154" width="60" height="8" rx="2" fill="#0F1F33" opacity="0.4"/>
+  <rect x="340" y="154" width="40" height="8" rx="2" fill="#1F4E79" opacity="0.6"/>
+  <line x1="228" y1="178" x2="452" y2="178" stroke="#F1F5F9" stroke-width="1.5"/>
+  <rect x="228" y="190" width="10" height="10" rx="2" fill="#1F4E79"/>
+  <rect x="246" y="191" width="55" height="7" rx="2" fill="#0F1F33" opacity="0.55"/>
+  <rect x="310" y="191" width="50" height="7" rx="2" fill="#E2E8F0"/>
+  <rect x="310" y="191" width="30" height="7" rx="2" fill="#1F4E79" opacity="0.5"/>
+  <rect x="405" y="188" width="40" height="13" rx="6" fill="#EFF4FB"/>
+  <rect x="411" y="192" width="28" height="5" rx="2" fill="#1F4E79" opacity="0.7"/>
+  <rect x="228" y="215" width="10" height="10" rx="2" fill="#1E7145"/>
+  <rect x="246" y="216" width="45" height="7" rx="2" fill="#0F1F33" opacity="0.5"/>
+  <rect x="310" y="216" width="50" height="7" rx="2" fill="#E2E8F0"/>
+  <rect x="310" y="216" width="18" height="7" rx="2" fill="#1E7145" opacity="0.5"/>
+  <rect x="405" y="213" width="40" height="13" rx="6" fill="#F0FDF4"/>
+  <rect x="411" y="217" width="28" height="5" rx="2" fill="#1E7145" opacity="0.7"/>
+  <rect x="228" y="240" width="10" height="10" rx="2" fill="#7C3AED"/>
+  <rect x="246" y="241" width="60" height="7" rx="2" fill="#0F1F33" opacity="0.45"/>
+  <rect x="310" y="241" width="50" height="7" rx="2" fill="#E2E8F0"/>
+  <rect x="310" y="241" width="22" height="7" rx="2" fill="#7C3AED" opacity="0.5"/>
+  <rect x="405" y="238" width="40" height="13" rx="6" fill="#F5F3FF"/>
+  <rect x="411" y="242" width="28" height="5" rx="2" fill="#7C3AED" opacity="0.7"/>
+  <line x1="228" y1="264" x2="452" y2="264" stroke="#F1F5F9" stroke-width="1.5"/>
+  <rect x="228" y="276" width="65" height="8" rx="3" fill="#0F1F33" opacity="0.6"/>
+  <rect x="390" y="273" width="60" height="14" rx="4" fill="#1E7145" opacity="0.12"/>
+  <rect x="396" y="276" width="48" height="8" rx="2" fill="#1E7145" opacity="0.7"/>
+  <rect x="228" y="308" width="214" height="42" rx="12" fill="#1F4E79"/>
+  <text x="335" y="333" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="white">Guardar no cofre</text>
+  <rect x="28" y="120" width="165" height="180" rx="16" fill="white" stroke="#E2E8F0" stroke-width="1.5"/>
+  <rect x="28" y="120" width="165" height="44" rx="16" fill="#F8FAFC"/>
+  <rect x="28" y="144" width="165" height="20" fill="#F8FAFC"/>
+  <rect x="44" y="134" width="55" height="7" rx="3" fill="#0F1F33" opacity="0.55"/>
+  <rect x="44" y="146" width="35" height="5" rx="2" fill="#64748B" opacity="0.4"/>
+  <circle cx="56" cy="191" r="20" fill="none" stroke="#E2E8F0" stroke-width="4"/>
+  <circle cx="56" cy="191" r="20" fill="none" stroke="#1F4E79" stroke-width="4" stroke-dasharray="82 44" stroke-linecap="round" transform="rotate(-90 56 191)"/>
+  <text x="56" y="195" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" font-weight="600" fill="#1F4E79">67%</text>
+  <rect x="84" y="182" width="35" height="6" rx="2" fill="#0F1F33" opacity="0.5"/>
+  <rect x="84" y="192" width="50" height="5" rx="2" fill="#64748B" opacity="0.35"/>
+  <circle cx="56" cy="242" r="20" fill="none" stroke="#E2E8F0" stroke-width="4"/>
+  <circle cx="56" cy="242" r="20" fill="none" stroke="#1E7145" stroke-width="4" stroke-dasharray="50 76" stroke-linecap="round" transform="rotate(-90 56 242)"/>
+  <text x="56" y="246" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" font-weight="600" fill="#1E7145">40%</text>
+  <rect x="84" y="233" width="35" height="6" rx="2" fill="#0F1F33" opacity="0.45"/>
+  <rect x="84" y="243" width="50" height="5" rx="2" fill="#64748B" opacity="0.3"/>
+  <circle cx="56" cy="293" r="20" fill="none" stroke="#E2E8F0" stroke-width="4"/>
+  <circle cx="56" cy="293" r="20" fill="none" stroke="#7C3AED" stroke-width="4" stroke-dasharray="35 91" stroke-linecap="round" transform="rotate(-90 56 293)"/>
+  <text x="56" y="297" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" font-weight="600" fill="#7C3AED">28%</text>
+  <rect x="84" y="284" width="35" height="6" rx="2" fill="#0F1F33" opacity="0.4"/>
+  <rect x="84" y="294" width="50" height="5" rx="2" fill="#64748B" opacity="0.3"/>
+  <rect x="487" y="110" width="168" height="90" rx="16" fill="white" stroke="#BF4700" stroke-width="1.5"/>
+  <rect x="487" y="110" width="168" height="38" rx="16" fill="#FEF3C7"/>
+  <rect x="487" y="128" width="168" height="20" fill="#FEF3C7"/>
+  <circle cx="510" cy="129" r="10" fill="#F59E0B" opacity="0.25"/>
+  <text x="510" y="133" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#92400E">!</text>
+  <rect x="526" y="124" width="75" height="7" rx="3" fill="#92400E" opacity="0.55"/>
+  <rect x="526" y="136" width="50" height="5" rx="2" fill="#92400E" opacity="0.35"/>
+  <rect x="504" y="158" width="55" height="8" rx="3" fill="#0F1F33" opacity="0.5"/>
+  <rect x="578" y="155" width="62" height="14" rx="7" fill="#BF4700"/>
+  <text x="609" y="165" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="white">Paguei</text>
+  <rect x="490" y="225" width="165" height="64" rx="14" fill="white" stroke="#E2E8F0" stroke-width="1.5"/>
+  <rect x="506" y="240" width="45" height="7" rx="3" fill="#0F1F33" opacity="0.5"/>
+  <rect x="506" y="256" width="100" height="12" rx="4" fill="#1E7145" opacity="0.1"/>
+  <rect x="514" y="259" width="84" height="6" rx="2" fill="#1E7145" opacity="0.6"/>
+  <circle cx="576" cy="244" r="10" fill="#1E7145" opacity="0.15"/>
+  <line x1="193" y1="210" x2="210" y2="220" stroke="#1F4E79" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+  <line x1="470" y1="165" x2="487" y2="148" stroke="#BF4700" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+  <circle cx="640" cy="60" r="22" fill="#7C3AED" opacity="0.08"/>
+  <circle cx="640" cy="60" r="14" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="40" cy="370" r="18" fill="#1F4E79" opacity="0.08"/>
+  <circle cx="40" cy="370" r="11" fill="#1F4E79" opacity="0.1"/>
+  <circle cx="530" cy="390" r="2" fill="#64748B" opacity="0.12"/>
+  <circle cx="546" cy="390" r="2" fill="#64748B" opacity="0.12"/>
+  <circle cx="562" cy="390" r="2" fill="#64748B" opacity="0.12"/>
+  <circle cx="530" cy="406" r="2" fill="#64748B" opacity="0.08"/>
+  <circle cx="546" cy="406" r="2" fill="#64748B" opacity="0.08"/>
+  <circle cx="562" cy="406" r="2" fill="#64748B" opacity="0.08"/>
+</svg>
