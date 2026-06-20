@@ -48,9 +48,11 @@ export function calcularFatura(
   const totalFatura = valorBase + valorIVA;
   const ivaGuardar = valorIVA;
 
+  // IRS: taxa estimada sobre rendimento tributavel (base x coeficiente 0.75)
+  // Regime simplificado: rendimento tributavel = valorBase x 0.75
   const irsGuardar = config.temRetencao
     ? 0
-    : arredondar(valorBase * TAXA_IRS_ESTIMADA);
+    : arredondar(valorBase * COEFICIENTE_SIMPLIFICADO * TAXA_IRS_ESTIMADA);
 
   const ssGuardar = config.isencaoPrimeiroAnoSS
     ? 0

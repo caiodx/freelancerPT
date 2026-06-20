@@ -226,7 +226,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
               <p className="text-2xl font-extrabold text-gray-900">&#8364;{totalFaturado.toFixed(2)}</p>
             </div>
             <div className="bg-blue-50 rounded-xl border border-blue-100 px-5 py-4">
-              <p className="text-xs text-[#1F4E79] font-medium mb-1">Total a reservar (impostos)</p>
+              <p className="text-xs text-[#1F4E79] font-medium mb-1">Total a separar (IVA + IRS + SS)</p>
               <p className="text-2xl font-extrabold text-[#1F4E79]">&#8364;{totalReservar.toFixed(2)}</p>
             </div>
           </div>
@@ -272,7 +272,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                     <div className="text-right shrink-0 flex items-center gap-1">
                       <div>
                         <p className="font-bold text-gray-900 text-sm">&#8364;{f.valor_total.toFixed(2)}</p>
-                        <p className="text-xs font-semibold text-[#1F4E79]">reservar &#8364;{reservar.toFixed(0)}</p>
+                        <p className="text-xs font-semibold text-[#1F4E79]">separar &#8364;{reservar.toFixed(0)}</p>
                       </div>
                       <button onClick={() => abrirEditar(f)} className="p-1.5 text-gray-300 hover:text-[#1F4E79] transition-colors"><Pencil className="w-4 h-4" /></button>
                       <button onClick={() => handleApagar(f.id)} className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
@@ -332,7 +332,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                     ))}
                   </div>
                   <div className="border-t border-gray-200 pt-2 flex justify-between text-sm">
-                    <span className="text-gray-500">Total a reservar</span>
+                    <span className="text-gray-500">Total a separar (IVA + IRS + SS)</span>
                     <span className="font-bold text-red-500">&#8364;{(previewEdit.ivaGuardar + previewEdit.irsGuardar + previewEdit.ssGuardar).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
@@ -406,7 +406,7 @@ export function FaturasClient({ faturas: inicial, config, userId, autoOpenModal 
                     ))}
                   </div>
                   <div className="border-t border-gray-200 pt-2 flex justify-between text-sm">
-                    <span className="text-gray-500">Total a reservar</span>
+                    <span className="text-gray-500">Total a separar (IVA + IRS + SS)</span>
                     <span className="font-bold text-red-500">&#8364;{(preview.ivaGuardar + preview.irsGuardar + preview.ssGuardar).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">

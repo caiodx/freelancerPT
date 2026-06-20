@@ -43,7 +43,7 @@ export function ResumoMensalWidget({
     {
       label: `Guardado em ${anoAtual}`,
       value: `€${totalGuardado.toFixed(0)}`,
-      sub: `de €${totalNecessario.toFixed(0)} necessario no ano`,
+      sub: `de €${totalNecessario.toFixed(0)} a separar no ano`,
       icon: PiggyBank,
       color: pctTotal >= 80 ? "text-[#1E7145]" : pctTotal >= 45 ? "text-amber-500" : "text-red-500",
       bg: pctTotal >= 80 ? "bg-green-50" : pctTotal >= 45 ? "bg-amber-50" : "bg-red-50",
@@ -51,7 +51,7 @@ export function ResumoMensalWidget({
     {
       label: "Falta guardar",
       value: falta > 0 ? `€${falta.toFixed(0)}` : "Coberto",
-      sub: falta > 0 ? `para cobrir impostos de ${anoAtual}` : "Todos os impostos cobertos",
+      sub: falta > 0 ? `a separar em ${anoAtual} (IVA + IRS + SS)` : "Obrigacoes fiscais cobertas",
       icon: TrendingUp,
       color: falta > 0 ? "text-red-500" : "text-[#1E7145]",
       bg: falta > 0 ? "bg-red-50" : "bg-green-50",

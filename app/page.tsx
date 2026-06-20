@@ -141,24 +141,24 @@ export default function Home() {
 
             {/* Headline */}
             <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">
-              Numa fatura de&nbsp;
+              De uma fatura de&nbsp;
               <span className="text-[#1F4E79]">€3.000</span>,
-              o Estado vai buscar&nbsp;
-              <span className="text-[#BF4700] underline decoration-wavy decoration-[#BF4700]/40">€1.635</span>.
+              so&nbsp;<span className="text-[#1E7145]">€2.055</span>&nbsp;e realmente teu.
               <br />
-              <span className="text-gray-600 text-3xl lg:text-4xl">Ja separaste?</span>
+              <span className="text-gray-600 text-3xl lg:text-4xl">O IVA, IRS e SS ja tem dono certo.</span>
             </h1>
 
             <p className="text-lg text-gray-600 leading-relaxed">
-              A maioria dos freelancers em Portugal gasta o dinheiro que chegou na conta
-              &mdash; sem saber que quase <strong>44% pertence ao fisco</strong>.
-              Quando chega o acerto, o choque e brutal. O FreelancerPT resolve isso.
+              O IVA (€690) pertence ao fisco desde o inicio &mdash; e dinheiro do cliente que
+              passa pela tua conta. E do teu rendimento real de €3.000, ainda deves
+              <strong>~€945 em IRS&nbsp;+&nbsp;SS (~31%)</strong>. A maioria mistura tudo e descobre tarde demais.
+              O FreelancerPT separa isso automaticamente.
             </p>
 
             {/* Mini stats */}
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {[
-                { v: "44%", l: "da fatura e do Estado" },
+                { v: "~31%", l: "do rendimento em IRS + SS" },
                 { v: "4×/ano", l: "prazos IVA que podes perder" },
                 { v: "€19k+", l: "divida media anual sem controlo" },
               ].map((s) => (
@@ -250,10 +250,11 @@ export default function Home() {
             </Badge>
             <h2 className="text-3xl lg:text-4xl font-extrabold text-white mb-4 tracking-tight">
               Se faturaste <span className="text-[#BF4700]">€3.000/mes</span> este ano<br />
-              ja deves <span className="text-red-400">€19.617 ao Estado</span>
+              tens <span className="text-amber-400">€945/mes em IRS+SS</span> — e <span className="text-blue-300">€690/mes de IVA</span> a devolver
             </h2>
             <p className="text-gray-400 max-w-xl mx-auto text-lg">
-              Este dinheiro entrou na tua conta. Mas nunca foi teu. Aqui esta a prova:
+              IVA passa em transito pela tua conta. IRS e SS sao os teus impostos reais.
+              Aqui esta o que tens de gerir:
             </p>
           </div>
 
@@ -263,7 +264,7 @@ export default function Home() {
 
               {/* Header row */}
               <div className="hidden sm:grid grid-cols-4 bg-white/10 px-6 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                <span>Imposto</span>
+                <span>Categoria</span>
                 <span className="text-center">Por fatura</span>
                 <span className="text-center">Por mes</span>
                 <span className="text-right text-red-400">Divida anual</span>
@@ -271,8 +272,8 @@ export default function Home() {
 
               {[
                 {
-                  name: "IVA (23%)",
-                  desc: "Cobras ao cliente mas devolves ao fisco trimestralmente",
+                  name: "IVA — nao e teu",
+                  desc: "Cobras ao cliente e devolves ao fisco. Nao sai do teu rendimento.",
                   perFatura: "€690",
                   porMes: "€690",
                   anual: "€8.280",
@@ -280,8 +281,8 @@ export default function Home() {
                   bg: "bg-red-500/5",
                 },
                 {
-                  name: "IRS (~22%)",
-                  desc: "Regime simplificado: 75% da fatura e tributavel",
+                  name: "IRS — estimativa (~22%)",
+                  desc: "Taxa media estimada. Sistema real e progressivo por escaloes (13%-48%) — tributa 75% do rendimento.",
                   perFatura: "€495",
                   porMes: "€495",
                   anual: "€5.940",
@@ -289,8 +290,8 @@ export default function Home() {
                   bg: "bg-amber-500/5",
                 },
                 {
-                  name: "Seguranca Social",
-                  desc: "21,4% sobre 70% dos teus rendimentos trimestrais",
+                  name: "Seguranca Social (21,4%)",
+                  desc: "21,4% x 70% da base. Isento no 1.o ano de atividade (art. 150.o CIES).",
                   perFatura: "€450",
                   porMes: "€450",
                   anual: "€5.397",
@@ -352,8 +353,46 @@ export default function Home() {
               </div>
             </div>
 
+            {/* R2 summary box — IRS+SS vs IVA */}
+            <div className="mt-6 bg-white/5 border border-white/15 rounded-2xl p-5 space-y-3">
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">
+                    Do que sai do teu rendimento (IRS + SS)
+                  </p>
+                  <p className="text-2xl font-extrabold text-amber-400">~€945 por fatura de €3.000</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">
+                    IVA — em transito
+                  </p>
+                  <p className="text-2xl font-extrabold text-blue-300">€690</p>
+                </div>
+              </div>
+              <div className="border-t border-white/10 pt-3">
+                <p className="text-xs text-gray-400 leading-relaxed italic">
+                  O IVA (€690) passa pela tua conta mas pertence ao Estado desde o inicio — nunca foi teu rendimento.
+                  Do teu rendimento real, o IRS e o SS levam ~€945 (31%).
+                </p>
+              </div>
+            </div>
+
+            {/* SS 1st year callout */}
+            <div className="mt-6 flex gap-3 bg-[#7C3AED]/10 border border-[#7C3AED]/30 rounded-2xl p-4">
+              <span className="text-xl shrink-0">🎉</span>
+              <div>
+                <p className="font-bold text-[#7C3AED] text-sm mb-0.5">
+                  1.o ano de atividade? SS = €0 — isento por lei!
+                </p>
+                <p className="text-gray-400 text-xs leading-relaxed">
+                  Art. 150.o CIES: nao pagas Seguranca Social no 1.o ano. No 2.o ano pagas so 1/3.
+                  Activa esta opcao na <a href="#calculadora" className="underline text-[#7C3AED]/80">calculadora abaixo</a>.
+                </p>
+              </div>
+            </div>
+
             {/* Warning box */}
-            <div className="mt-6 flex gap-4 bg-[#BF4700]/15 border border-[#BF4700]/30 rounded-2xl p-5">
+            <div className="mt-4 flex gap-4 bg-[#BF4700]/15 border border-[#BF4700]/30 rounded-2xl p-5">
               <AlertTriangle className="w-6 h-6 text-[#BF4700] shrink-0 mt-0.5" />
               <div>
                 <p className="font-bold text-white text-sm mb-1">
@@ -386,8 +425,11 @@ export default function Home() {
 
           {/* Income level comparison */}
           <div className="mt-16">
-            <p className="text-center text-gray-400 text-sm font-semibold uppercase tracking-widest mb-8">
-              Quanto deves por nivel de faturacao anual
+            <p className="text-center text-gray-400 text-sm font-semibold uppercase tracking-widest mb-2">
+              Quanto tens de gerir por nivel de faturacao anual
+            </p>
+            <p className="text-center text-gray-500 text-xs mb-8">
+              IVA = em transito (e do cliente) &nbsp;|&nbsp; IRS + SS = os teus impostos reais
             </p>
             <div className="grid md:grid-cols-3 gap-5">
               {[
@@ -447,7 +489,7 @@ export default function Home() {
                       <span className="text-gray-400 text-sm font-bold">Total ao Estado</span>
                       <span className={`text-2xl font-extrabold ${tier.totalColor}`}>{tier.total}</span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">{tier.pct} da tua faturacao bruta</p>
+                    <p className="text-xs text-gray-500 mt-1">{tier.pct} da faturacao bruta <span className="text-gray-600">(incl. IVA em transito)</span></p>
                   </div>
                 </div>
               ))}
@@ -478,7 +520,7 @@ export default function Home() {
               <div className="p-6 space-y-4">
                 {[
                   "Recebe €3.690 na conta e gasta tudo",
-                  "Nao sabe que €690 e IVA que vai devolver",
+                  "Gasta os €690 de IVA do cliente — dinheiro que nunca foi seu",
                   "Esquece o prazo do IVA — multa de €200",
                   "Em Abril recebe aviso das Financas: deve €11.337",
                   "Nao tem o dinheiro. Entra em divida com o fisco.",
@@ -672,10 +714,9 @@ export default function Home() {
               </div>
 
               <p className="text-sm text-gray-500 italic border-l-2 border-[#1F4E79]/30 pl-4">
-                &ldquo;Vejo o cofre todos os dias quando emito uma fatura.
-                É o primeiro lugar onde olho — como o saldo do banco, mas para impostos.&rdquo;
+                &ldquo;Nunca tinha percebido o quanto o IVA era do cliente e nao meu. O cofre tornou isso obvio desde o primeiro dia. Agora separo tudo automaticamente.&rdquo;
                 <br />
-                <span className="font-semibold text-gray-700 not-italic">— Rafael C., designer UX, Porto</span>
+                <span className="font-semibold text-gray-700 not-italic">— Mariana L., consultora de marketing, Lisboa</span>
               </p>
             </div>
 
@@ -685,7 +726,7 @@ export default function Home() {
               <div className="relative w-full max-w-sm">
                 <CofreFiscal
                   readOnly
-                  titulo="Exemplo — Rafael C. • Junho 2026"
+                  titulo="Exemplo — Mariana L. • Junho 2026"
                   faturado={3000}
                   guardado={{ iva: 230, irs: 40, ss: 375 }}
                 />
@@ -707,7 +748,7 @@ export default function Home() {
                         <Lock className="w-4 h-4 text-white" />
                       </div>
                       <p className="font-bold text-gray-900 text-sm mb-0.5">Vê o teu cofre real</p>
-                      <p className="text-gray-500 text-xs mb-3">Com os teus números, não os do Rafael.</p>
+                      <p className="text-gray-500 text-xs mb-3">Com os teus numeros, nao os da Mariana.</p>
                       <a
                         href="/register"
                         className="block w-full bg-[#BF4700] hover:bg-[#a33a00] text-white font-bold py-2.5 rounded-lg text-sm transition-colors"
@@ -891,13 +932,21 @@ export default function Home() {
                 e o que e realmente teu. Sem registo. Sem truques.
               </p>
 
+              {/* SS 1st year note */}
+              <div className="flex items-center gap-2 bg-[#7C3AED]/20 border border-[#7C3AED]/30 rounded-xl px-4 py-2.5 mb-1">
+                <span className="text-sm shrink-0">🎉</span>
+                <p className="text-xs text-purple-200 leading-relaxed">
+                  <strong>1.o ano de atividade?</strong> Activa &ldquo;Isencao SS&rdquo; na calculadora — SS = €0 (isento por lei).
+                </p>
+              </div>
+
               {/* Scary example */}
               <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-3">
                 <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold">Exemplo: fatura de €3.000</p>
                 {[
-                  { label: "IVA — devolver ao Estado", val: "€690", color: "text-red-400" },
-                  { label: "IRS — reservar ja", val: "€495", color: "text-amber-400" },
-                  { label: "SS — guardar", val: "€450", color: "text-orange-400" },
+                  { label: "IVA — em transito (e do cliente)", val: "€690", color: "text-blue-300" },
+                  { label: "IRS — reservar (~22% taxa media)", val: "€495", color: "text-amber-400" },
+                  { label: "SS — guardar (isento 1.o ano)", val: "€450", color: "text-orange-400" },
                 ].map((r) => (
                   <div key={r.label} className="flex justify-between items-center">
                     <span className="text-gray-400 text-sm">{r.label}</span>
@@ -908,6 +957,13 @@ export default function Home() {
                   <span className="text-gray-300 text-sm font-bold">Teu liquido real</span>
                   <span className="text-[#4ade80] font-extrabold text-xl">€2.055</span>
                 </div>
+              </div>
+
+              <div className="flex gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                <span className="text-yellow-400 text-sm shrink-0">⚠</span>
+                <p className="text-xs text-blue-200 leading-relaxed">
+                  IRS estimado como ~22% de taxa media — a taxa real e progressiva por escaloes (13%-48%) e depende do teu rendimento total, deducoes especificas, minimo de existencia e situacao familiar. Para o calculo exato, consulta um contabilista certificado.
+                </p>
               </div>
 
               <Button
@@ -1052,7 +1108,7 @@ export default function Home() {
               ))}
             </div>
             <h2 className="text-3xl font-extrabold text-gray-900 mb-3 tracking-tight">
-              +340 freelancers ja nao perdem dinheiro para o fisco
+              +340 recibos verdes. Uma comunidade no controlo fiscal.
             </h2>
             <p className="text-gray-600">O que eles dizem (com numeros reais).</p>
           </div>
