@@ -113,26 +113,20 @@ const STEPS: Step[] = [
   },
   {
     id: "coeficiente",
-    pergunta: "Qual é a tua área de actividade principal?",
-    subtitulo: "Define o coeficiente de rendimento tributável no IRS (regime simplificado).",
+    pergunta: "Como descreves o teu trabalho principal?",
+    subtitulo: "Define o coeficiente do IRS no regime simplificado. A maioria dos freelancers usa 0,35.",
     opcoes: [
       {
-        valor: 0.75,
-        titulo: "Tecnologia / Consultoria informática",
-        descricao: "Desenvolvimento de software, IT, consultoria — a maioria das CAE tech. Coeficiente 0,75.",
+        valor: 0.35,
+        titulo: "Prestação de serviços (tech, design, consultoria…)",
+        descricao: "Desenvolvimento, IT, design, marketing, gestão — qualquer serviço que não esteja na lista do Art. 151.º do CIRS. Coeficiente 0,35. É o mais comum.",
         Icon: Laptop,
       },
       {
         valor: 0.75,
-        titulo: "Outros serviços gerais",
-        descricao: "Design, gestão, marketing, comunicação e outros serviços. Coeficiente 0,75.",
+        titulo: "Profissão regulamentada (médico, advogado, arquitecto…)",
+        descricao: "Profissões listadas especificamente na Tabela do Art. 151.º do CIRS — ex: medicina, advocacia, arquitectura, contabilidade. Coeficiente 0,75.",
         Icon: Briefcase,
-      },
-      {
-        valor: 0.35,
-        titulo: "Actividade com coeficiente reduzido",
-        descricao: "A AT indicou-me especificamente coeficiente 0,35 para o meu CAE. Em dúvida, escolhe a opção acima.",
-        Icon: FileText,
       },
     ],
   },
@@ -269,7 +263,7 @@ export function OnboardingWizard({ userId }: Props) {
             <FileText className="w-4 h-4 text-blue-600 shrink-0" />
             <p className="text-sm font-medium text-blue-800">
               Coeficiente IRS: <strong>{full.coeficiente === 0.35 ? "0,35" : "0,75"}</strong>
-              {" "}— {full.coeficiente === 0.35 ? "actividade específica" : "serviços gerais"}
+              {" "}— {full.coeficiente === 0.35 ? "prestação de serviços (campo 404)" : "profissão regulamentada art. 151.º (campo 403)"}
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ export interface ConfiguracaoFiscal {
   ivaIsento: boolean;
   temRetencao: boolean;
   isencaoPrimeiroAnoSS: boolean;
+  coeficiente?: number; // 0.35 (campo 404 — serviços gerais) ou 0.75 (campo 403 — profissões art. 151.º)
 }
 
 export interface ResultadoCalculo {
@@ -24,7 +25,10 @@ export interface ResultadoCalculo {
 
 // ---- Constantes fiscais 2026 ----
 const TAXA_IVA = 0.23;
-const COEFICIENTE_SIMPLIFICADO = 0.75;
+// Coeficientes regime simplificado (Art. 31.º CIRS):
+//   0.35 → campo 404 (prestações de serviços não previstas no art. 151.º) — maioria dos freelancers tech
+//   0.75 → campo 403 (profissões especificamente previstas na Tabela do art. 151.º do CIRS)
+const COEFICIENTE_DEFAULT = 0.35;
 const TAXA_IRS_ESTIMADA = 0.22;
 const TAXA_SS = 0.214;
 const BASE_SS = 0.70;
@@ -48,11 +52,13 @@ export function calcularFatura(
   const totalFatura = valorBase + valorIVA;
   const ivaGuardar = valorIVA;
 
-  // IRS: taxa estimada sobre rendimento tributavel (base x coeficiente 0.75)
-  // Regime simplificado: rendimento tributavel = valorBase x 0.75
+  // IRS: taxa estimada sobre rendimento tributável (base × coeficiente)
+  // Regime simplificado: rendimento tributável = valorBase × coeficiente
+  // Usa o coeficiente configurado no onboarding; fallback para 0.35 (campo 404 — mais comum)
+  const coeficiente = config.coeficiente ?? COEFICIENTE_DEFAULT;
   const irsGuardar = config.temRetencao
     ? 0
-    : arredondar(valorBase * COEFICIENTE_SIMPLIFICADO * TAXA_IRS_ESTIMADA);
+    : arredondar(valorBase * coeficiente * TAXA_IRS_ESTIMADA);
 
   const ssGuardar = config.isencaoPrimeiroAnoSS
     ? 0
